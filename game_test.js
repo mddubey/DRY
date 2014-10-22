@@ -38,5 +38,22 @@ describe('Game', function() {
 			assert.equal(shape.height,400);
 			assert.equal(shape.width,400);
 		});
+
+		it('each node should have an id',function  () {
+			var shape = game.createShape(shapeData);
+			shape.nodes.forEach(function  (node) {
+				assert.equal((['node0','node1'].indexOf(node.id) > -1),true);
+			});
+			assert.equal(shape.nodes.length,2);
+		});
+
+		it('each Edge should have an id',function  () {
+			var shape = game.createShape(shapeData);
+			shape.edges.forEach(function  (edge) {
+				assert.equal((['edge0'].indexOf(edge.id) > -1),true);
+			});
+			console.log(JSON.stringify(shape.edges));
+			assert.equal(shape.edges.length,1);
+		});
 	});
 });
