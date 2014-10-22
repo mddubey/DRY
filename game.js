@@ -19,7 +19,7 @@ game.Edge = function(startNode, endNode, id) {
 	this.id = 'edge' + id;
 	this.visited = false;
 	this.isEqualTo = function(edge){
-		return this.startNode.isEqualTo(edge.startNode.isEqualTo) && this.endNode.isEqualTo(edge.endNode.isEqualTo);
+		return this.startNode.isEqualTo(edge.startNode) && this.endNode.isEqualTo(edge.endNode);
 	}
 };
 
