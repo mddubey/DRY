@@ -7,12 +7,18 @@ game.Node = function(x, y) {
 	this.x = x;
 	this.y = y;
 	this.edges = [];
+	this.isEqualTo = function(node){
+		return this.x === node.x && this.y === node.y;
+	}
 };
 
 game.Edge = function(startNode, endNode) {
 	this.startNode = startNode;
 	this.endNode = endNode;
 	this.visited = false;
+	this.isEqualTo = function(edge){
+		return this.startNode.isEqualTo(edge.startNode.isEqualTo) && this.endNode.isEqualTo(edge.endNode.isEqualTo);
+	}
 };
 
 game.createShape = function(shapeData){
