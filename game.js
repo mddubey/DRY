@@ -1,6 +1,7 @@
 var Game = function(){
 
 };
+
 Game.prototype.Node = function(x, y, id) {
 	this.x = x;
 	this.y = y;
@@ -9,7 +10,11 @@ Game.prototype.Node = function(x, y, id) {
 	this.isEqualTo = function(node){
 		return this.x === node.x && this.y === node.y;
 	}
+	this.addEdge = function(edge){
+		this.edges.push(edge);
+	}
 };
+
 Game.prototype.Edge = function(startNode, endNode, id) {
 	this.startNode = startNode;
 	this.endNode = endNode;
@@ -19,6 +24,7 @@ Game.prototype.Edge = function(startNode, endNode, id) {
 		return this.startNode.isEqualTo(edge.startNode) && this.endNode.isEqualTo(edge.endNode);
 	}
 };
+
 Game.prototype.createShape = function(shapeData){
 	var shape = {};
 	shape.height = shapeData.height;
@@ -28,12 +34,20 @@ Game.prototype.createShape = function(shapeData){
 		return new game.Node(nodeData[0],nodeData[1],index);
 	});
 	shape.edges = shapeData.edgesData.map(function(edgeData,index) {
-		var start = new game.Node(edgeData[0], edgeData[1]);
-		var end = new game.Node(edgeData[2], edgeData[3]);
-		return new game.Edge(start, end, index);
+		var start = shape.nodes.filter(function(node){
+			return node.isEqualTo({x:edgeData[0],y:edgeData[1]});
+		})[0];
+		var end = shape.nodes.filter(function(node){
+			return node.isEqualTo({x:edgeData[2],y:edgeData[3]});
+		})[0];
+		var edge = new game.Edge(start, end, index);
+		start.addEdge(edge);
+		end.addEdge(edge);
+		return edge;
 	});
 	return shape;
 }
+
 Game.prototype.startGame = function(controller) {
 	var shapeData = {
 		"height": 400,

@@ -1,8 +1,8 @@
 var assert = chai.assert;
 
 describe('Node', function() {
+	var game = new Game();
 	describe('isEqualTo', function() {
-		var game = new Game();
 		it('should tell other node is equal to itself.', function() {
 			var node = new game.Node(2, 3);
 			var otherNode = new game.Node(2, 3);
@@ -14,6 +14,16 @@ describe('Node', function() {
 			var thirdNode = new game.Node(3, 3);
 			assert.equal(firstNode.isEqualTo(secondNode), false);
 			assert.equal(firstNode.isEqualTo(thirdNode), false);
+		});
+	});
+	describe('addEdge',function(){
+		it('should add given edge in it\'s edges.', function() {
+			var node = new game.Node(2, 3);
+			var otherNode = new game.Node(2, 3);
+			var edge = new game.Edge(node,otherNode);
+			assert.equal(node.edges.length,0);
+			node.addEdge(edge);
+			assert.equal(node.edges.length,1);
 		});
 	});
 });
@@ -74,6 +84,14 @@ describe('Game', function() {
 		it('should give each edge a unique id.', function() {
 			assert.equal(shape.edges[0].id, 'edge0');
 		});
+
+		it('should assign each node their adjacent edges.', function() {
+			assert.equal(shape.nodes[0].edges.length, 1);
+			assert.equal(shape.nodes[1].edges.length, 1);
+			shape.nodes.forEach(function(node){
+				assert.equal(node.edges[0].isEqualTo(shape.edges[0]),true)
+			})
+		});
 	});
 
 	describe('startGame', function() {
@@ -85,7 +103,7 @@ describe('Game', function() {
 			controller.onShapeReady = function(shape) {
 				controller.called = true;
 			};
-		})
+		});
 		it('should create a shape and get a controller for the game.', function() {
 			var game = new Game();
 			assert.equal(typeof(game.shape), 'undefined');
@@ -96,9 +114,9 @@ describe('Game', function() {
 		});
 		it('should inform controller when shape is ready.', function() {
 			var game = new Game();
-			assert.equal(controller.called,false);
+			assert.equal(controller.called, false);
 			game.startGame(controller);
-			assert.equal(controller.called,true);
+			assert.equal(controller.called, true);
 		});
 	});
 });
