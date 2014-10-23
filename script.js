@@ -1,6 +1,6 @@
 var controller = {};
 
-controller.onGameStart = function(shape){
+controller.onShapeReady = function(shape){
 	var container = $('div');
 	var svgHTML = '<svg width="'+shape.width+'" height="'+shape.height+'">';
 	shape.edges.forEach(function(edge){
@@ -18,6 +18,7 @@ controller.onGameStart = function(shape){
 }
 
 var init = function() {
+	var game = new Game();
 	game.startGame(controller);
 };
 

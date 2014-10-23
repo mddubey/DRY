@@ -1,9 +1,7 @@
-var game = {
-	controller: '',
-	shape:''
-};
+var Game = function(){
 
-game.Node = function(x, y, id) {
+};
+Game.prototype.Node = function(x, y, id) {
 	this.x = x;
 	this.y = y;
 	this.id = 'node' + id;
@@ -12,8 +10,7 @@ game.Node = function(x, y, id) {
 		return this.x === node.x && this.y === node.y;
 	}
 };
-
-game.Edge = function(startNode, endNode, id) {
+Game.prototype.Edge = function(startNode, endNode, id) {
 	this.startNode = startNode;
 	this.endNode = endNode;
 	this.id = 'edge' + id;
@@ -22,11 +19,11 @@ game.Edge = function(startNode, endNode, id) {
 		return this.startNode.isEqualTo(edge.startNode) && this.endNode.isEqualTo(edge.endNode);
 	}
 };
-
-game.createShape = function(shapeData){
+Game.prototype.createShape = function(shapeData){
 	var shape = {};
 	shape.height = shapeData.height;
 	shape.width = shapeData.width;
+	var game = this;
 	shape.nodes = shapeData.nodesData.map(function(nodeData,index){
 		return new game.Node(nodeData[0],nodeData[1],index);
 	});
@@ -37,8 +34,7 @@ game.createShape = function(shapeData){
 	});
 	return shape;
 }
-
-game.startGame = function(controller) {
+Game.prototype.startGame = function(controller) {
 	var shapeData = {
 		"height": 400,
 		"width": 400,
@@ -55,7 +51,7 @@ game.startGame = function(controller) {
 			[320, 20, 320, 320]
 		]
 	};
-	game.controller = controller;
-	game.shape = game.createShape(shapeData);
-	game.controller.onGameStart(game.shape);
+	this.controller = controller;
+	this.shape = this.createShape(shapeData);
+	this.controller.onShapeReady(this.shape);
 };
