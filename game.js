@@ -9,9 +9,14 @@ Game.prototype.Node = function(x, y, id) {
 	this.edges = [];
 	this.isEqualTo = function(node) {
 		return this.x === node.x && this.y === node.y;
-	}
+	};
 	this.addEdge = function(edge) {
 		this.edges.push(edge);
+	};
+	this.isEdgeAdjacent = function(edge){
+		return this.edges.some(function(edge1){
+			return edge.id === edge1.id;
+		});
 	}
 };
 
@@ -104,6 +109,10 @@ Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.shape.getEdgeById(edgeID);
 	if(!this.currentNode){
 		this.controller.onStartNodeNotSelected();
+		return;
+	}
+	if(!this.currentNode.isEdgeAdjacent(edge)){
+		this.controller.onNonAdjacentVisit();
 		return;
 	}
 	edge.visited = true;

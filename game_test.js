@@ -19,14 +19,26 @@ describe('Node', function() {
 	describe('addEdge', function() {
 		it('should add given edge in it\'s edges.', function() {
 			var node = new game.Node(2, 3);
-			var otherNode = new game.Node(2, 3);
+			var otherNode = new game.Node(3, 3);
 			var edge = new game.Edge(node, otherNode);
 			assert.equal(node.edges.length, 0);
 			node.addEdge(edge);
 			assert.equal(node.edges.length, 1);
 		});
 	});
-
+	describe('isEdgeAdjacent', function() {
+		it('should tell if given edge is adjacent to it.', function() {
+			var node = new game.Node(2, 3);
+			var otherNode = new game.Node(3, 3);
+			var thirdNode = new game.Node(5, 5);
+			var edge = new game.Edge(node, otherNode);
+			node.addEdge(edge);
+			otherNode.addEdge(edge);
+			assert.isTrue(node.isEdgeAdjacent(edge));
+			assert.isTrue(otherNode.isEdgeAdjacent(edge));
+			assert.isFalse(thirdNode.isEdgeAdjacent(edge));
+		});
+	});
 });
 
 describe('Edge', function() {
@@ -117,7 +129,8 @@ describe('Game', function() {
 			onEdgeVisitedCalled: false,
 			onNodeSelectedCalled: 0,
 			onStartNodeNotSelectedCalled:false,
-			onStartNodeAlreadySelectedCalled: false
+			onStartNodeAlreadySelectedCalled: false,
+			onNonAdjacentVisitCalled:false
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
@@ -131,7 +144,9 @@ describe('Game', function() {
 		controller.onStartNodeAlreadySelected = function(nodeID) {
 			controller.onStartNodeAlreadySelectedCalled = true;
 		};
-
+		controller.onNonAdjacentVisit = function(nodeID) {
+			controller.onNonAdjacentVisitCalled = true;
+		};
 		controller.onStartNodeNotSelected = function () {
 			controller.onStartNodeNotSelectedCalled = true;
 		}
@@ -195,7 +210,7 @@ describe('Game', function() {
 			game.visitEdge('edge0');
 			assert.equal(controller.onNodeSelectedCalled, 2);
 		});
-		it('should not select edge before selecting start node.', function() {
+		it('should not visit edge before selecting start node.', function() {
 			var game = new Game();
 			var edgeID = 'edge0';
 			game.startGame(controller);
@@ -206,15 +221,35 @@ describe('Game', function() {
 			assert.isFalse(edge.visited);
 		});
 
-		it('should inform controller if edge is selected before selecting start node.', function() {
+		it('should inform controller when edge is being visited before selecting start node.', function() {
 			var game = new Game();
 			var edgeID = 'edge0';
 			game.startGame(controller);
+			var edge = game.shape.getEdgeById(edgeID);
+			assert.isFalse(controller.onStartNodeNotSelectedCalled);
 			game.visitEdge(edgeID);
+			assert.isTrue(controller.onStartNodeNotSelectedCalled);
+		});
+
+		it('should not visit an edge which is non-adjacent to currentNode', function() {
+			var game = new Game();
+			game.startGame(controller);
+			game.selectNode('node1');
+			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(edge.visited);
 			game.visitEdge(edgeID);
-			assert.isTrue(controller.onStartNodeNotSelectedCalled);
+			assert.isFalse(edge.visited);
+		});
+
+		it('should inform controller when an edge is being visited which is non-adjacent to currentNode', function() {
+			var game = new Game();
+			game.startGame(controller);
+			game.selectNode('node1');
+			var edgeID = 'edge1';
+			assert.isFalse(controller.onNonAdjacentVisitCalled);
+			game.visitEdge(edgeID);
+			assert.isTrue(controller.onNonAdjacentVisitCalled);
 		});
 
 	});
