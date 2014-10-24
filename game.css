@@ -2,3 +2,7 @@
 	text-align: center;
 	color: red;
 }
+svg{
+	margin:auto auto;
+	display: block;
+}

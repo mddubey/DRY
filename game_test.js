@@ -48,9 +48,9 @@ describe('Edge', function() {
 			assert.isFalse(firstEdge.isEqualTo(thirdEdge));
 		});
 	});
-	describe('getOtherNode', function(){
-		it('should give other node when one node is given', function(){
-			var edge = new game.Edge(firstNode, secondNode,0);
+	describe('getOtherNode', function() {
+		it('should give other node when one node is given', function() {
+			var edge = new game.Edge(firstNode, secondNode, 0);
 			assert.isTrue(edge.getOtherNode(firstNode).isEqualTo(secondNode));
 			assert.isTrue(edge.getOtherNode(secondNode).isEqualTo(firstNode));
 		});
@@ -115,16 +115,20 @@ describe('Game', function() {
 		controller = {
 			onShapeReadyCalled: false,
 			onEdgeVisitedCalled: false,
-			onNodeSelectedCalled: 0
+			onNodeSelectedCalled: 0,
+			onStartNodeAlreadySelectedCalled: false
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
 		};
-		controller.onEdgeVisited = function(shape) {
+		controller.onEdgeVisited = function(edgeID) {
 			controller.onEdgeVisitedCalled = true;
 		};
-		controller.onNodeSelected = function(shape) {
+		controller.onNodeSelected = function(nodeID) {
 			controller.onNodeSelectedCalled++;
+		};
+		controller.onStartNodeAlreadySelected = function(nodeID) {
+			controller.onStartNodeAlreadySelectedCalled = true;
 		};
 	});
 
@@ -143,6 +147,7 @@ describe('Game', function() {
 			game.startGame(controller);
 			assert.isTrue(controller.onShapeReadyCalled);
 		});
+
 	});
 
 	describe('visitEdge', function() {
@@ -181,9 +186,9 @@ describe('Game', function() {
 			game.startGame(controller);
 			assert.equal(controller.onNodeSelectedCalled,0);
 			game.selectNode('node0');
-			assert.equal(controller.onNodeSelectedCalled,1);
+			assert.equal(controller.onNodeSelectedCalled, 1);
 			game.visitEdge('edge0');
-			assert.equal(controller.onNodeSelectedCalled,2);
+			assert.equal(controller.onNodeSelectedCalled, 2);
 		});
 	});
 
@@ -197,11 +202,28 @@ describe('Game', function() {
 		it('should inform controller when node is selected.', function() {
 			var game = new Game();
 			game.startGame(controller);
-			assert.equal(controller.onNodeSelectedCalled,0);
+			assert.equal(controller.onNodeSelectedCalled, 0);
 			game.selectNode('node0');
-			assert.equal(controller.onNodeSelectedCalled,1);
+			assert.equal(controller.onNodeSelectedCalled, 1);
 		});
 
+		it('should not change start node once selected.', function() {
+			var game = new Game();
+			game.startGame(controller);
+			game.selectNode('node1');
+			assert.equal(game.currentNode.id, 'node1');
+			game.selectNode('node2');
+			assert.equal(game.currentNode.id, 'node1');
+		});
+
+		it('should inform controller when start node is changed.', function() {
+			var game = new Game();
+			game.startGame(controller);
+			game.selectNode('node1');
+			assert.isFalse(controller.onStartNodeAlreadySelectedCalled);
+			game.selectNode('node2');
+			assert.isTrue(controller.onStartNodeAlreadySelectedCalled);
+		});
 	});
 
 });

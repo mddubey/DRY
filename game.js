@@ -68,9 +68,13 @@ Game.prototype.Shape = function(shapeData) {
 	}
 };
 
-Game.prototype.selectNode = function(nodeID){
-	this.currentNode = this.shape.getNodeById(nodeID);
-	this.controller.onNodeSelected(nodeID);
+Game.prototype.selectNode = function(nodeId){
+	if(!this.currentNode){
+		this.currentNode = this.shape.getNodeById(nodeId);
+		this.controller.onNodeSelected(nodeId);
+		return;
+	}
+	this.controller.onStartNodeAlreadySelected(nodeId);
 }
 
 Game.prototype.startGame = function(controller) {
@@ -94,6 +98,7 @@ Game.prototype.startGame = function(controller) {
 	this.shape = new Game.prototype.Shape(shapeData);
 	this.controller.onShapeReady(this.shape);
 };
+
 
 Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.shape.getEdgeById(edgeID);
