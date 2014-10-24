@@ -131,18 +131,18 @@ describe('Game', function() {
 	});
 
 
-	describe('nodeSelected', function() {
+	describe('selectNode', function() {
 		it('should select start node on clicking first node.', function() {
 			var game = new Game();
 			game.startGame(controller);
-			game.onNodeSelected('node1');
+			game.selectNode('node1');
 			assert.equal(game.currentNode.id, 'node1');
 		});
 		it('should inform controller when node is selected.', function() {
 			var game = new Game();
 			game.startGame(controller);
 			assert.isFalse(controller.onNodeSelectedCalled);
-			game.onNodeSelected(controller);
+			game.selectNode(controller);
 			assert.isTrue(controller.onNodeSelectedCalled);
 		});
 	});

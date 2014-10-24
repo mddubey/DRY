@@ -17,9 +17,18 @@ controller.onShapeReady = function(shape){
 	container.html(svgHTML);
 }
 
+
+controller.onNodeSelected = function(nodeID){
+	var circles = $('circle');
+	circles.attr('fill','skyblue');
+	$('#' + nodeID).attr('fill','pink');
+}
+
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);
+	var circles = $('circle');
+	circles.click(function(){ game.selectNode(this.id) });
 };
 
 $(document).ready(init);
