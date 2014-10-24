@@ -30,11 +30,11 @@ describe('Node', function() {
 });
 
 describe('Edge', function() {
+	var game = new Game();
+	var firstNode = new game.Node(2, 3);
+	var secondNode = new game.Node(2, 2);
+	var thirdNode = new game.Node(3, 3);
 	describe('isEqualTo', function() {
-		var game = new Game();
-		var firstNode = new game.Node(2, 3);
-		var secondNode = new game.Node(2, 2);
-		var thirdNode = new game.Node(3, 3);
 		it('should tell other edge is equal to itself.', function() {
 			var edge = new game.Edge(firstNode, secondNode);
 			var otherEdge = new game.Edge(firstNode, secondNode);
@@ -48,7 +48,15 @@ describe('Edge', function() {
 			assert.isFalse(firstEdge.isEqualTo(thirdEdge));
 		});
 	});
+	describe('getOtherNode', function(){
+		it('should give other node when one node is given', function(){
+			var edge = new game.Edge(firstNode, secondNode,0);
+			assert.isTrue(edge.getOtherNode(firstNode).isEqualTo(secondNode));
+			assert.isTrue(edge.getOtherNode(secondNode).isEqualTo(firstNode));
+		});
+	});
 });
+
 
 describe('Shape', function() {
 	var game = new Game();
@@ -107,7 +115,7 @@ describe('Game', function() {
 		controller = {
 			onShapeReadyCalled: false,
 			onEdgeVisitedCalled: false,
-			onNodeSelectedCalled: false
+			onNodeSelectedCalled: 0
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
@@ -116,7 +124,7 @@ describe('Game', function() {
 			controller.onEdgeVisitedCalled = true;
 		};
 		controller.onNodeSelected = function(shape) {
-			controller.onNodeSelectedCalled = true;
+			controller.onNodeSelectedCalled++;
 		};
 	});
 
@@ -142,15 +150,20 @@ describe('Game', function() {
 			var game = new Game();
 			game.startGame(controller);
 			var edgeID = 'edge1';
-			assert.isFalse(game.shape.getEdgeById(edgeID).visited);
+			var edge = game.shape.getEdgeById(edgeID);
+			assert.isFalse(edge.visited);
+			game.selectNode(edge.startNode.id);
 			game.visitEdge(edgeID);
-			assert.isTrue(game.shape.getEdgeById(edgeID).visited);
+			assert.isTrue(edge.visited);
 		});
 		it('should inform controller when edge is visited', function() {
 			var game = new Game();
 			game.startGame(controller);
+			var edgeID = 'edge1';
+			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(controller.onEdgeVisitedCalled);
-			game.visitEdge('edge1');
+			game.selectNode(edge.startNode.id);
+			game.visitEdge(edgeID);
 			assert.isTrue(controller.onEdgeVisitedCalled);
 		});
 		it('should change the current node to other node of edge', function() {
@@ -158,7 +171,19 @@ describe('Game', function() {
 			game.startGame(controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
-			// game.onNodeSelected
+			game.selectNode(edge.startNode.id);
+			assert.isTrue(game.currentNode.isEqualTo(edge.startNode));
+			game.visitEdge(edge.id);
+			assert.isTrue(game.currentNode.isEqualTo(edge.endNode));
+		});
+		it('should inform controller when current node is changed.', function() {
+			var game = new Game();
+			game.startGame(controller);
+			assert.equal(controller.onNodeSelectedCalled,0);
+			game.selectNode('node0');
+			assert.equal(controller.onNodeSelectedCalled,1);
+			game.visitEdge('edge0');
+			assert.equal(controller.onNodeSelectedCalled,2);
 		});
 	});
 
@@ -172,10 +197,11 @@ describe('Game', function() {
 		it('should inform controller when node is selected.', function() {
 			var game = new Game();
 			game.startGame(controller);
-			assert.isFalse(controller.onNodeSelectedCalled);
-			game.selectNode(controller);
-			assert.isTrue(controller.onNodeSelectedCalled);
+			assert.equal(controller.onNodeSelectedCalled,0);
+			game.selectNode('node0');
+			assert.equal(controller.onNodeSelectedCalled,1);
 		});
+
 	});
 
 });
