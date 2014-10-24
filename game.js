@@ -63,11 +63,10 @@ Game.prototype.Shape = function(shapeData) {
 	}
 };
 
-
-Game.prototype.onNodeSelected = function(selectedNode) {
+Game.prototype.selectNode = function(selectedNode){
 	this.currentNode = this.shape.getNodeById(selectedNode);
-	this.controller.onNodeSelected(this.shape);
-};
+	this.controller.onNodeSelected(selectedNode);
+}
 
 Game.prototype.startGame = function(controller) {
 	var shapeData = {
