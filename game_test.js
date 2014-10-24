@@ -116,6 +116,7 @@ describe('Game', function() {
 			onShapeReadyCalled: false,
 			onEdgeVisitedCalled: false,
 			onNodeSelectedCalled: 0,
+			onStartNodeNotSelectedCalled:false,
 			onStartNodeAlreadySelectedCalled: false
 		};
 		controller.onShapeReady = function(shape) {
@@ -130,6 +131,10 @@ describe('Game', function() {
 		controller.onStartNodeAlreadySelected = function(nodeID) {
 			controller.onStartNodeAlreadySelectedCalled = true;
 		};
+
+		controller.onStartNodeNotSelected = function () {
+			controller.onStartNodeNotSelectedCalled = true;
+		}
 	});
 
 	describe('startGame', function() {
@@ -151,7 +156,7 @@ describe('Game', function() {
 	});
 
 	describe('visitEdge', function() {
-		it('should set given edge as viseted', function() {
+		it('should set given edge as visited', function() {
 			var game = new Game();
 			game.startGame(controller);
 			var edgeID = 'edge1';
@@ -190,6 +195,28 @@ describe('Game', function() {
 			game.visitEdge('edge0');
 			assert.equal(controller.onNodeSelectedCalled, 2);
 		});
+		it('should not select edge before selecting start node.', function() {
+			var game = new Game();
+			var edgeID = 'edge0';
+			game.startGame(controller);
+			game.visitEdge(edgeID);
+			var edge = game.shape.getEdgeById(edgeID);
+			assert.isFalse(edge.visited);
+			game.visitEdge(edgeID);
+			assert.isFalse(edge.visited);
+		});
+
+		it('should inform controller if edge is selected before selecting start node.', function() {
+			var game = new Game();
+			var edgeID = 'edge0';
+			game.startGame(controller);
+			game.visitEdge(edgeID);
+			var edge = game.shape.getEdgeById(edgeID);
+			assert.isFalse(edge.visited);
+			game.visitEdge(edgeID);
+			assert.isTrue(controller.onStartNodeNotSelectedCalled);
+		});
+
 	});
 
 	describe('selectNode', function() {

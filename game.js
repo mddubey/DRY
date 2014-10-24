@@ -102,6 +102,10 @@ Game.prototype.startGame = function(controller) {
 
 Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.shape.getEdgeById(edgeID);
+	if(!this.currentNode){
+		this.controller.onStartNodeNotSelected();
+		return;
+	}
 	edge.visited = true;
 	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);

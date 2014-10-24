@@ -30,9 +30,14 @@ controller.onNodeSelected = function(nodeID) {
 	$('#' + nodeID).attr('fill', 'pink');
 }
 
-controller.onStartNodeAlreadySelected = function (nodeID) {
+controller.onStartNodeAlreadySelected = function(nodeID) {
 	var notification = $('#notification');
 	notification.html('You have already selected the starting node.');
+}
+
+controller.onStartNodeNotSelected = function() {
+	var notification = $('#notification');
+	notification.html('Please select a node to start the game before clicking an edge.');
 }
 
 var init = function() {
