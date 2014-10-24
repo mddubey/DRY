@@ -56,6 +56,17 @@ Game.prototype.Shape = function(shapeData) {
 			return edge.id === edgeID;
 		})[0];
 	};
+	this.getNodeById = function(nodeIdToFind) {
+		return shape.nodes.filter(function(node) {
+			return node.id == nodeIdToFind;
+		})[0];
+	}
+};
+
+
+Game.prototype.onNodeSelected = function(selectedNode) {
+	this.currentNode = this.shape.getNodeById(selectedNode);
+	this.controller.onNodeSelected(this.shape);
 };
 
 Game.prototype.startGame = function(controller) {
@@ -80,7 +91,7 @@ Game.prototype.startGame = function(controller) {
 	this.controller.onShapeReady(this.shape);
 };
 
-Game.prototype.visitEdge = function(edgeID){
+Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.shape.getEdgeById(edgeID);
 	edge.visited = true;
 	this.controller.onEdgeVisited(edgeID);
