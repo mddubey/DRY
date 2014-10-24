@@ -26,6 +26,7 @@ describe('Node', function() {
 			assert.equal(node.edges.length,1);
 		});
 	});
+
 });
 
 describe('Edge', function() {
@@ -49,8 +50,7 @@ describe('Edge', function() {
 	});
 });
 
-
-describe('Game', function() {
+describe('Shape',function(){
 	var game = new Game();
 	describe('createShape', function() {
 		var shapeData;
@@ -67,8 +67,9 @@ describe('Game', function() {
 					[20, 20, 320, 20]
 				]
 			};
-			shape = game.createShape(shapeData);
+			shape = new game.Shape(shapeData);
 		});
+
 		it('should create a shape from raw data.', function() {
 			assert.equal(shape.height, 400);
 			assert.equal(shape.width, 400);
@@ -93,7 +94,10 @@ describe('Game', function() {
 			})
 		});
 	});
+});
 
+describe('Game', function() {
+	var game = new Game();
 	describe('startGame', function() {
 		var controller;
 		beforeEach(function() {
@@ -118,5 +122,9 @@ describe('Game', function() {
 			game.startGame(controller);
 			assert.equal(controller.called, true);
 		});
+		// it('should select start node on clicking first node.', function(){
+		// 	var game = new Game();
+		// 	game.onNodeSelected('node1');	
+		// });
 	});
 });

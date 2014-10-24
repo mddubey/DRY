@@ -25,15 +25,16 @@ Game.prototype.Edge = function(startNode, endNode, id) {
 	}
 };
 
-Game.prototype.createShape = function(shapeData){
-	var shape = {};
-	shape.height = shapeData.height;
-	shape.width = shapeData.width;
-	var game = this;
-	shape.nodes = shapeData.nodesData.map(function(nodeData,index){
+Game.prototype.Shape = function(shapeData){
+	// var shape = {};
+	this.height = shapeData.height;
+	this.width = shapeData.width;
+	var game = Game.prototype;
+	this.nodes = shapeData.nodesData.map(function(nodeData,index){
 		return new game.Node(nodeData[0],nodeData[1],index);
 	});
-	shape.edges = shapeData.edgesData.map(function(edgeData,index) {
+	var shape = this;
+	this.edges = shapeData.edgesData.map(function(edgeData,index) {
 		var start = shape.nodes.filter(function(node){
 			return node.isEqualTo({x:edgeData[0],y:edgeData[1]});
 		})[0];
@@ -45,8 +46,11 @@ Game.prototype.createShape = function(shapeData){
 		end.addEdge(edge);
 		return edge;
 	});
-	return shape;
 }
+
+// Game.prototype.onNodeSelected = function(selectedNode){
+// 	this.currentNode = getNodeById('selectedNode');
+// }
 
 Game.prototype.startGame = function(controller) {
 	var shapeData = {
@@ -66,6 +70,6 @@ Game.prototype.startGame = function(controller) {
 		]
 	};
 	this.controller = controller;
-	this.shape = this.createShape(shapeData);
+	this.shape = new Game.prototype.Shape(shapeData);
 	this.controller.onShapeReady(this.shape);
 };
