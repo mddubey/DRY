@@ -45,6 +45,17 @@ Game.prototype.Shape = function(shapeData){
 		end.addEdge(edge);
 		return edge;
 	});
+	this.getNodeById = function(nodeIdToFind){
+		return shape.nodes.filter(function(node){
+			return node.id == nodeIdToFind;
+		})[0];
+	}
+}
+
+
+Game.prototype.onNodeSelected = function(selectedNode){
+	this.currentNode = this.shape.getNodeById(selectedNode);
+	this.controller.onNodeSelected(this.shape);
 }
 
 Game.prototype.startGame = function(controller) {

@@ -76,17 +76,20 @@ describe('Shape', function() {
 		assert.equal(shape.nodes[0].id, 'node0');
 		assert.equal(shape.nodes[1].id, 'node1');
 	});
-
 	it('should give each edge a unique id.', function() {
 		assert.equal(shape.edges[0].id, 'edge0');
 	});
-
 	it('should assign each node their adjacent edges.', function() {
 		assert.equal(shape.nodes[0].edges.length, 1);
 		assert.equal(shape.nodes[1].edges.length, 1);
 		shape.nodes.forEach(function(node) {
 			assert.equal(node.edges[0].isEqualTo(shape.edges[0]), true)
-		})
+			// })
+		});
+
+		it('should get the node by id.', function() {
+			assert.equal(shape.getNodeById('node0'), shape.nodes[0]);
+		});
 	});
 });
 
@@ -96,7 +99,8 @@ describe('Game', function() {
 	beforeEach(function() {
 		controller = {
 			onShapeReadyCalled: false,
-			onEdgeVisitedCalled:false
+			onEdgeVisitedCalled: false,
+			onNodeSelectedCalled: false
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
@@ -104,7 +108,11 @@ describe('Game', function() {
 		controller.onEdgeVisited = function(shape) {
 			controller.onEdgeVisitedCalled = true;
 		};
+		controller.onNodeSelected = function(shape) {
+			controller.onNodeSelectedCalled = true;
+		};
 	});
+
 	describe('startGame', function() {
 		it('should create a shape and get a controller for the game.', function() {
 			var game = new Game();
@@ -122,21 +130,21 @@ describe('Game', function() {
 		});
 	});
 
-	// describe('visitEdge', function() {
-	// 	var getEdgeById = function(shape, edgeID) {
-	// 		return shape.edges.filter(function(edge) {
-	// 			return edge.id === edgeID;
-	// 		})[0];
-	// 	};
-	// 	it('should set given edge as viseted', function() {
-	// 		game.startGame(controller);
-	// 		console.log(getEdgeById(game.shape, 'edge1'));
-	// 		assert.isFalse(getEdgeById(game.shape, 'edge1').visited);
-	// 		game.visitEdge();
-	// 	});
-	// 	// it('should select start node on clicking first node.', function(){
-		// 	var game = new Game();
-		// 	game.onNodeSelected('node1');	
-		// });
-	// });
+
+	describe('nodeSelected', function() {
+		it('should select start node on clicking first node.', function() {
+			var game = new Game();
+			game.startGame(controller);
+			game.onNodeSelected('node1');
+			assert.equal(game.currentNode.id, 'node1');
+		});
+		it('should inform controller when node is selected.', function() {
+			var game = new Game();
+			game.startGame(controller);
+			assert.isFalse(controller.onNodeSelectedCalled);
+			game.onNodeSelected(controller);
+			assert.isTrue(controller.onNodeSelectedCalled);
+		});
+	});
+
 });
