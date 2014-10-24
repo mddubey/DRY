@@ -32,18 +32,23 @@ controller.onNodeSelected = function(nodeID) {
 
 controller.onStartNodeAlreadySelected = function(nodeID) {
 	var notification = $('#notification');
-	notification.html('You have already selected the starting node.');
+	notification.text('You have already selected the starting node.');
+}
+
+controller.onNonAdjacentVisit = function(){
+	var notification = $('#notification');
+	notification.text('You can visit just adjacent edges to current node.');	
 }
 
 controller.onStartNodeNotSelected = function() {
 	var notification = $('#notification');
-	notification.html('Please select a node to start the game before clicking an edge.');
+	notification.text('Please select a node to start the game before clicking an edge.');
 }
 
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);
-	$('#container').on('click', '[id^="edge"]', function() {
+	$('#container').on('click', 'line', function() {
 		var edgeID = $(this).attr('id');
 		game.visitEdge(edgeID);
 	});
