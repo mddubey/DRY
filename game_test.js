@@ -88,10 +88,18 @@ describe('Shape', function() {
 			assert.equal(node.edges[0].isEqualTo(shape.edges[0]), true)
 		})
 	});
+	describe('getEdgeById', function() {
+		it('should give the edge matching to given edgeID', function() {
+			var edge = shape.getEdgeById('edge0');
+			var node1 = new game.Node(20,20,0);
+			var node2 = new game.Node(320,20,1)
+			var edge1 = new game.Edge(node1,node2,0);
+			assert.isTrue(edge.isEqualTo(edge1));
+		});
+	});
 });
 
 describe('Game', function() {
-	var game = new Game();
 	var controller;
 	beforeEach(function() {
 		controller = {
@@ -122,21 +130,25 @@ describe('Game', function() {
 		});
 	});
 
-	// describe('visitEdge', function() {
-	// 	var getEdgeById = function(shape, edgeID) {
-	// 		return shape.edges.filter(function(edge) {
-	// 			return edge.id === edgeID;
-	// 		})[0];
-	// 	};
-	// 	it('should set given edge as viseted', function() {
-	// 		game.startGame(controller);
-	// 		console.log(getEdgeById(game.shape, 'edge1'));
-	// 		assert.isFalse(getEdgeById(game.shape, 'edge1').visited);
-	// 		game.visitEdge();
-	// 	});
-	// 	// it('should select start node on clicking first node.', function(){
+	describe('visitEdge', function() {
+		it('should set given edge as viseted', function() {
+			var game = new Game();
+			game.startGame(controller);
+			var edgeID = 'edge1';
+			assert.isFalse(game.shape.getEdgeById(edgeID).visited);
+			game.visitEdge(edgeID);
+			assert.isTrue(game.shape.getEdgeById(edgeID).visited);
+		});
+		it('should inform controller when edge is visited',function(){
+			var game = new Game();
+			game.startGame(controller);
+			assert.isFalse(controller.onEdgeVisitedCalled);
+			game.visitEdge('edge1');
+			assert.isTrue(controller.onEdgeVisitedCalled);
+		});
+		// it('should select start node on clicking first node.', function(){
 		// 	var game = new Game();
 		// 	game.onNodeSelected('node1');	
 		// });
-	// });
+	});
 });
