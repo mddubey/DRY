@@ -22,11 +22,10 @@ Game.prototype.Edge = function(startNode, endNode, id) {
 	this.visited = false;
 	this.isEqualTo = function(edge){
 		return this.startNode.isEqualTo(edge.startNode) && this.endNode.isEqualTo(edge.endNode);
-	}
+	};
 };
 
 Game.prototype.Shape = function(shapeData){
-	// var shape = {};
 	this.height = shapeData.height;
 	this.width = shapeData.width;
 	var game = Game.prototype;
@@ -47,10 +46,6 @@ Game.prototype.Shape = function(shapeData){
 		return edge;
 	});
 }
-
-// Game.prototype.onNodeSelected = function(selectedNode){
-// 	this.currentNode = getNodeById('selectedNode');
-// }
 
 Game.prototype.startGame = function(controller) {
 	var shapeData = {
