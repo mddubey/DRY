@@ -59,6 +59,10 @@ controller.onEdgeRevisit = function(){
 	showErrorMessage('You can not visit an edge twice.');
 };
 
+controller.onGameFinished = function () {
+	showErrorMessage('Congrats!@! You have won. :)')
+}
+
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);

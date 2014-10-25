@@ -140,7 +140,8 @@ describe('Game', function() {
 			onStartNodeAlreadySelectedCalled: false,
 			onNonAdjacentVisitCalled: false,
 			onEdgeRevisitCalled: false,
-			onLevelCompleteCalled: false
+			onLevelCompleteCalled: false,
+			onGameFinishedCalled:false
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
@@ -167,6 +168,9 @@ describe('Game', function() {
 		controller.onLevelComplete = function() {
 			controller.onLevelCompleteCalled = true;
 		};
+		controller.onGameFinished = function(){
+			controller.onGameFinishedCalled = true;
+		}
 	});
 
 	describe('startGame', function() {
@@ -324,27 +328,27 @@ describe('Game', function() {
 			game.visitEdge(edgeID);
 			assert.isTrue(controller.onEdgeRevisitCalled);
 		});
-		it('should notify controller when level is completed.', function() {
-			var game = new Game();
-			gameSetup(game,controller);
-			game.selectNode('node0');
-			['edge0', 'edge3', 'edge1'].forEach(function(edge) {
-				game.visitEdge(edge);
-				assert.isFalse(controller.onLevelCompleteCalled);
-			});
-			game.visitEdge('edge2');
-			assert.isTrue(controller.onLevelCompleteCalled);
-		});
+		// it('should notify controller when level is completed.', function() {
+		// 	var game = new Game();
+		// 	gameSetup(game,controller);
+		// 	game.selectNode('node0');
+		// 	['edge0', 'edge3', 'edge1'].forEach(function(edge) {
+		// 		game.visitEdge(edge);
+		// 		assert.isFalse(controller.onLevelCompleteCalled);
+		// 	});
+		// 	game.visitEdge('edge2');
+		// 	assert.isTrue(controller.onLevelCompleteCalled);
+		// });
 		it('should notify controller as game finished when all levels are completed.', function() {
 			var game = new Game();
 			gameSetup(game,controller);
 			game.selectNode('node0');
 			['edge0', 'edge3', 'edge1'].forEach(function(edge) {
 				game.visitEdge(edge);
-				assert.isFalse(controller.onLevelCompleteCalled);
+				assert.isFalse(controller.onGameFinishedCalled);
 			});
 			game.visitEdge('edge2');
-			assert.isTrue(controller.onLevelCompleteCalled);
+			assert.isTrue(controller.onGameFinishedCalled);
 		});
 
 	});
