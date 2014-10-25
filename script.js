@@ -4,7 +4,7 @@ controller.onShapeReady = function(shape) {
 	var container = $('#container');
 	var svgHTML = '<svg width="' + shape.width + '" height="' + shape.height + '">';
 	shape.edges.forEach(function(edge) {
-		var lineHTML = '<line id="ID" x1="X1" y1="Y1" x2="X2" y2="Y2" style="stroke:rgb(0,0,0);stroke-width:15" />';
+		var lineHTML = '<line id="ID" x1="X1" y1="Y1" x2="X2" y2="Y2"/>';
 		lineHTML = lineHTML.replace('ID', edge.id).replace('X1', edge.startNode.x).replace('Y1', edge.startNode.y).replace('X2', edge.endNode.x).replace('Y2', edge.endNode.y);
 		svgHTML += lineHTML;
 	});
@@ -18,9 +18,7 @@ controller.onShapeReady = function(shape) {
 };
 
 controller.onEdgeVisited = function(edgeID) {
-	$('#' + edgeID).css({
-		stroke: 'rgb(0,200,0)'
-	});
+	$('#' + edgeID).attr('class','visited');
 };
 
 controller.onNodeSelected = function(nodeID) {
@@ -30,16 +28,16 @@ controller.onNodeSelected = function(nodeID) {
 };
 
 controller.onLevelComplete = function(){
-	showErrorMessage('You have completed this level.');
+	// showErrorMessage('You have completed this level.');
 }
 
 var showErrorMessage = function(message){
-	var notification = $('#error');
-	notification.fadeIn(1000);
-	notification.text(message);
+	var error = $('#error');
+	error.show();
+	error.find('h2').text(message);
 	setTimeout(function(){
-		notification.fadeOut(1000);
-	},5000);
+		error.fadeOut(1000);
+	},3000);
 };
 
 
@@ -60,7 +58,9 @@ controller.onEdgeRevisit = function(){
 };
 
 controller.onGameFinished = function () {
-	showErrorMessage('Congrats!@! You have won. :)')
+	$('#container').hide();
+	$('#error').hide();
+	$('#finish').show();
 }
 
 var init = function() {

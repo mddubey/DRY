@@ -1,6 +1,17 @@
 .notify{
 	text-align: center;
 	font-size: 110%;
+	display: none;
+}
+#finish{
+	color: blue;
+}
+line{
+	stroke:rgb(0,0,0);
+	stroke-width:15;
+}
+.visited{
+	stroke: rgb(0,200,0);
 }
 #error{
 	color: red;
