@@ -69,9 +69,6 @@ Game.prototype.Shape = function(shapeData) {
 	};
 
 	this.isLevelComplete = function() {
-		//  return this.edges.every(function (edge) {
-		//  	return edge.visited;
-		// });
 		return this.noOfEdgeVisited == this.edges.length;
 	};
 
@@ -136,7 +133,12 @@ Game.prototype.visitEdge = function(edgeID) {
 	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);
 	this.controller.onNodeSelected(this.currentNode.id);
+	
 	if(this.shape.isLevelComplete()){
+		if(this.level === this.noOfLevels){
+			this.controller.onGameFinished();
+			return;
+		}
 		this.controller.onLevelComplete();
 	}
 };
