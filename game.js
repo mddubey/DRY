@@ -38,6 +38,7 @@ Game.prototype.Edge = function(startNode, endNode, id) {
 Game.prototype.Shape = function(shapeData) {
 	this.height = shapeData.height;
 	this.width = shapeData.width;
+	this.noOfEdgeVisited = 0;
 	var game = Game.prototype;
 	this.nodes = shapeData.nodesData.map(function(nodeData, index) {
 		return new game.Node(nodeData[0], nodeData[1], index);
@@ -68,9 +69,10 @@ Game.prototype.Shape = function(shapeData) {
 	};
 
 	this.isLevelComplete = function() {
-		return this.edges.every(function (edge) {
-			return edge.visited;
-		});
+		//  return this.edges.every(function (edge) {
+		//  	return edge.visited;
+		// });
+		return this.noOfEdgeVisited == this.edges.length;
 	};
 
 	this.getNodeById = function(nodeIdToFind) {
@@ -130,6 +132,7 @@ Game.prototype.visitEdge = function(edgeID) {
 		return;
 	}
 	edge.visited = true;
+	this.shape.noOfEdgeVisited ++;
 	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);
 	this.controller.onNodeSelected(this.currentNode.id);

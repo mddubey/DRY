@@ -59,6 +59,7 @@ controller.onEdgeRevisit = function(){
 	showErrorMessage('You can not visit an edge twice.');
 };
 
+
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);

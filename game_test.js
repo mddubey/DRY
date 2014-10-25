@@ -89,6 +89,7 @@ describe('Shape', function() {
 		it('Should tell if level is complete.', function() {
 			assert.isFalse(shape.isLevelComplete());
 			shape.edges[0].visited = true;
+			shape.noOfEdgeVisited ++;
 			assert.isTrue(shape.isLevelComplete());
 		});
 	});
@@ -382,5 +383,12 @@ describe('Game', function() {
 			assert.isTrue(controller.onStartNodeAlreadySelectedCalled);
 		});
 	});
+	
+	// describe('restartGame',function(){
+	// 	it('should reset the shape on restart of a level.',function(){
+	// 		var game = new Game();
+	// 		game.startGame(controller);
+	// 	});
+	// })
 
 });
