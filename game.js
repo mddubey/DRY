@@ -106,8 +106,11 @@ Game.prototype.startGame = function(controller) {
 			[320, 20, 320, 320]
 		]
 	};
+	this.level = 1;
+	this.noOfLevels = 1;
 	this.controller = controller;
-	this.shape = new Game.prototype.Shape(shapeData);
+	this.shapesData = [shapeData];
+	this.shape = new Game.prototype.Shape(this.shapesData[0]);
 	this.controller.onShapeReady(this.shape);
 };
 

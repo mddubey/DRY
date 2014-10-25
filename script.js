@@ -29,6 +29,10 @@ controller.onNodeSelected = function(nodeID) {
 	$('#' + nodeID).attr('fill', 'pink');
 };
 
+controller.onLevelComplete = function(){
+	showErrorMessage('You have completed this level.');
+}
+
 var showErrorMessage = function(message){
 	var notification = $('#error');
 	notification.fadeIn(1000);
