@@ -111,6 +111,10 @@ Game.prototype.visitEdge = function(edgeID) {
 		this.controller.onStartNodeNotSelected();
 		return;
 	}
+	if(edge.visited){
+		this.controller.onEdgeRevisit();
+		return;
+	}
 	if(!this.currentNode.isEdgeAdjacent(edge)){
 		this.controller.onNonAdjacentVisit();
 		return;
@@ -120,10 +124,3 @@ Game.prototype.visitEdge = function(edgeID) {
 	this.currentNode = edge.getOtherNode(this.currentNode);
 	this.controller.onNodeSelected(this.currentNode.id);
 };
-
-
-
-
-
-
-
