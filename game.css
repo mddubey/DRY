@@ -1,7 +1,10 @@
 .notify{
 	text-align: center;
-	color: red;
+	font-size: 110%;
 }
+#error{
+	color: red;
+}	
 svg{
 	margin:auto auto;
 	display: block;

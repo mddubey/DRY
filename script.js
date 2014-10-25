@@ -4,12 +4,12 @@ controller.onShapeReady = function(shape) {
 	var container = $('#container');
 	var svgHTML = '<svg width="' + shape.width + '" height="' + shape.height + '">';
 	shape.edges.forEach(function(edge) {
-		var lineHTML = '<line id="ID" x1="X1" y1="Y1" x2="X2" y2="Y2" style="stroke:rgb(0,0,0);stroke-width:10" />';
+		var lineHTML = '<line id="ID" x1="X1" y1="Y1" x2="X2" y2="Y2" style="stroke:rgb(0,0,0);stroke-width:15" />';
 		lineHTML = lineHTML.replace('ID', edge.id).replace('X1', edge.startNode.x).replace('Y1', edge.startNode.y).replace('X2', edge.endNode.x).replace('Y2', edge.endNode.y);
 		svgHTML += lineHTML;
 	});
 	shape.nodes.forEach(function(node) {
-		var circleHTML = '<circle id="ID" cx="CX" cy="CY" r="10" stroke="black" stroke-width="3" fill="skyblue"/>';
+		var circleHTML = '<circle id="ID" cx="CX" cy="CY" r="15" stroke="black" stroke-width="3" fill="skyblue"/>';
 		circleHTML = circleHTML.replace('ID', node.id).replace('CX', node.x).replace('CY', node.y);
 		svgHTML += circleHTML;
 	});
@@ -23,38 +23,48 @@ controller.onEdgeVisited = function(edgeID) {
 	});
 };
 
-
 controller.onNodeSelected = function(nodeID) {
 	var circles = $('circle');
 	circles.attr('fill', 'skyblue');
 	$('#' + nodeID).attr('fill', 'pink');
-}
+};
+
+var showErrorMessage = function(message){
+	var notification = $('#error');
+	notification.fadeIn(1000);
+	notification.text(message);
+	setTimeout(function(){
+		notification.fadeOut(1000);
+	},5000);
+};
+
 
 controller.onStartNodeAlreadySelected = function(nodeID) {
-	var notification = $('#notification');
-	notification.text('You have already selected the starting node.');
-}
+	showErrorMessage('You have already selected the starting node.');
+};
 
 controller.onNonAdjacentVisit = function(){
-	var notification = $('#notification');
-	notification.text('You can visit just adjacent edges to current node.');	
-}
+	showErrorMessage('You can visit just adjacent edges to current node.');
+};
 
 controller.onStartNodeNotSelected = function() {
-	var notification = $('#notification');
-	notification.text('Please select a node to start the game before clicking an edge.');
-}
+	showErrorMessage('Please select a node as starting point to start the game.');
+};
+
+controller.onEdgeRevisit = function(){
+	showErrorMessage('You can not visit an edge twice.');
+};
 
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);
+	var circles = $('circle');
 	$('#container').on('click', 'line', function() {
 		var edgeID = $(this).attr('id');
 		game.visitEdge(edgeID);
 	});
-	var circles = $('circle');
 	circles.click(function() {
-		game.selectNode(this.id)
+		game.selectNode(this.id);
 	});
 };
 
