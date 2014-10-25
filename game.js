@@ -28,8 +28,8 @@ Game.prototype.Edge = function(startNode, endNode, id) {
 	this.isEqualTo = function(edge) {
 		return this.startNode.isEqualTo(edge.startNode) && this.endNode.isEqualTo(edge.endNode);
 	};
-	this.getOtherNode = function(node){
-		if(node.isEqualTo(this.startNode))
+	this.getOtherNode = function(node) {
+		if (node.isEqualTo(this.startNode))
 			return this.endNode;
 		return this.startNode;
 	}
@@ -66,6 +66,13 @@ Game.prototype.Shape = function(shapeData) {
 			return edge.id === edgeID;
 		})[0];
 	};
+
+	this.isLevelComplete = function() {
+		return this.edges.every(function (edge) {
+			return edge.visited;
+		});
+	};
+
 	this.getNodeById = function(nodeIdToFind) {
 		return shape.nodes.filter(function(node) {
 			return node.id == nodeIdToFind;
@@ -73,8 +80,8 @@ Game.prototype.Shape = function(shapeData) {
 	}
 };
 
-Game.prototype.selectNode = function(nodeId){
-	if(!this.currentNode){
+Game.prototype.selectNode = function(nodeId) {
+	if (!this.currentNode) {
 		this.currentNode = this.shape.getNodeById(nodeId);
 		this.controller.onNodeSelected(nodeId);
 		return;
@@ -123,4 +130,7 @@ Game.prototype.visitEdge = function(edgeID) {
 	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);
 	this.controller.onNodeSelected(this.currentNode.id);
+	if(this.shape.isLevelComplete()){
+		this.controller.onLevelComplete();
+	}
 };
