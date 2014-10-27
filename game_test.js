@@ -142,7 +142,8 @@ describe('Game', function() {
 			onNonAdjacentVisitCalled: false,
 			onEdgeRevisitCalled: false,
 			onLevelCompleteCalled: false,
-			onGameFinishedCalled:false
+			onGameFinishedCalled:false,
+			onLevelRestartCalled:0
 		};
 		controller.onShapeReady = function(shape) {
 			controller.onShapeReadyCalled = true;
@@ -171,7 +172,10 @@ describe('Game', function() {
 		};
 		controller.onGameFinished = function(){
 			controller.onGameFinishedCalled = true;
-		}
+		};
+		controller.onLevelRestart = function(shape){
+			controller.onLevelRestartCalled++;
+		};
 	});
 
 	describe('startGame', function() {
@@ -388,11 +392,30 @@ describe('Game', function() {
 		});
 	});
 	
-	describe('restartGame',function(){
+	describe('restartLevel',function(){
 		it('should reset the shape on restart of a level.',function(){
 			var game = new Game();
-			game.startGame(controller);
+			gameSetup(game,controller);
+			game.selectNode('node1');
+			var edgeID = 'edge0';
+			var edge = game.shape.getEdgeById(edgeID);
+			game.visitEdge(edgeID);
+			assert.equal(game.shape.noOfEdgeVisited,1);			
+			game.restartLevel();
+			assert.equal(game.shape.noOfEdgeVisited,0);			
 		});
-	})
+
+		it('should inform controller when level is restart.',function(){
+			var game = new Game();
+			gameSetup(game,controller);
+			game.selectNode('node1');
+			var edgeID = 'edge0';
+			var edge = game.shape.getEdgeById(edgeID);
+			game.visitEdge(edgeID);
+			assert.equal(controller.onLevelRestartCalled,0);
+			game.restartLevel();
+			assert.equal(controller.onLevelRestartCalled,1);
+		});
+	});
 
 });

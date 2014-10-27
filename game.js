@@ -142,3 +142,9 @@ Game.prototype.visitEdge = function(edgeID) {
 		this.controller.onLevelComplete();
 	}
 };
+
+Game.prototype.restartLevel = function () {
+	this.shape = new Game.prototype.Shape(this.shapesData[this.level - 1]);
+	this.currentNode = '';
+	this.controller.onLevelRestart(this.shape);
+};

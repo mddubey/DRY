@@ -61,19 +61,25 @@ controller.onEdgeRevisit = function(){
 
 controller.onGameFinished = function () {
 	showErrorMessage('Congrats!@! You have won. :)')
-}
+};
+
+controller.onLevelRestart = function(shape){
+	controller.onShapeReady(shape);
+};
 
 var init = function() {
 	var game = new Game();
 	game.startGame(controller);
-	var circles = $('circle');
 	$('#container').on('click', 'line', function() {
 		var edgeID = $(this).attr('id');
 		game.visitEdge(edgeID);
 	});
-	circles.click(function() {
+	$('#container').on('click', 'circle', function() {
 		game.selectNode(this.id);
 	});
+	$('#resetLevel').click(function(){
+		game.restartLevel();
+	})
 };
 
 $(document).ready(init);
