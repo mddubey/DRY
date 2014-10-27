@@ -170,7 +170,7 @@ describe('Game', function() {
 		controller.onLevelComplete = function() {
 			controller.onLevelCompleteCalled = true;
 		};
-		controller.onGameFinished = function(){
+		controller.onGameFinished = function() {
 			controller.onGameFinishedCalled = true;
 		};
 		controller.onLevelRestart = function(shape){
@@ -196,7 +196,7 @@ describe('Game', function() {
 
 	});
 
-	var gameSetup = function(game,controller) {
+	var gameSetup = function(game, controller) {
 		var shapeData = {
 			"height": 400,
 			"width": 400,
@@ -225,7 +225,7 @@ describe('Game', function() {
 	describe('visitEdge', function() {
 		it('should set given edge as visited', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(edge.visited);
@@ -235,7 +235,7 @@ describe('Game', function() {
 		});
 		it('should inform controller when edge is visited', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.equal(controller.onEdgeVisitedCalled, 0);
@@ -245,7 +245,7 @@ describe('Game', function() {
 		});
 		it('should change the current node to other node of edge', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			game.selectNode(edge.startNode.id);
@@ -255,7 +255,7 @@ describe('Game', function() {
 		});
 		it('should inform controller when current node is changed.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			assert.equal(controller.onNodeSelectedCalled, 0);
 			game.selectNode('node0');
 			assert.equal(controller.onNodeSelectedCalled, 1);
@@ -265,7 +265,7 @@ describe('Game', function() {
 		it('should not visit edge before selecting start node.', function() {
 			var game = new Game();
 			var edgeID = 'edge0';
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.visitEdge(edgeID);
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(edge.visited);
@@ -277,7 +277,7 @@ describe('Game', function() {
 		it('should inform controller when edge is being visited before selecting start node.', function() {
 			var game = new Game();
 			var edgeID = 'edge0';
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(controller.onStartNodeNotSelectedCalled);
 			game.visitEdge(edgeID);
@@ -286,7 +286,7 @@ describe('Game', function() {
 
 		it('should not visit an edge which is non-adjacent to currentNode', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node1');
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
@@ -299,7 +299,7 @@ describe('Game', function() {
 
 		it('should inform controller when an edge is being visited which is non-adjacent to currentNode', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node1');
 			var edgeID = 'edge1';
 			assert.isFalse(controller.onNonAdjacentVisitCalled);
@@ -309,7 +309,7 @@ describe('Game', function() {
 
 		it('should not visit an edge which is already visited', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(edge.visited);
@@ -324,7 +324,7 @@ describe('Game', function() {
 
 		it('should inform controller when an edge is being visited which is already visited', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			var edgeID = 'edge1';
 			var edge = game.shape.getEdgeById(edgeID);
 			assert.isFalse(controller.onEdgeRevisitCalled);
@@ -346,7 +346,7 @@ describe('Game', function() {
 		// });
 		it('should notify controller as game finished when all levels are completed.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node0');
 			['edge0', 'edge3', 'edge1'].forEach(function(edge) {
 				game.visitEdge(edge);
@@ -361,13 +361,13 @@ describe('Game', function() {
 	describe('selectNode', function() {
 		it('should select start node on clicking first node.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node1');
 			assert.equal(game.currentNode.id, 'node1');
 		});
 		it('should inform controller when node is selected.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			assert.equal(controller.onNodeSelectedCalled, 0);
 			game.selectNode('node0');
 			assert.equal(controller.onNodeSelectedCalled, 1);
@@ -375,7 +375,7 @@ describe('Game', function() {
 
 		it('should not change start node once selected.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node1');
 			assert.equal(game.currentNode.id, 'node1');
 			game.selectNode('node2');
@@ -384,7 +384,7 @@ describe('Game', function() {
 
 		it('should inform controller when start node is changed.', function() {
 			var game = new Game();
-			gameSetup(game,controller);
+			gameSetup(game, controller);
 			game.selectNode('node1');
 			assert.isFalse(controller.onStartNodeAlreadySelectedCalled);
 			game.selectNode('node2');
