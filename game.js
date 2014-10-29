@@ -27,7 +27,7 @@ Game.prototype.visit = function(visitor){
 	this.shape.nodes.forEach(visitor.renderNode);
 };
 
-Game.prototype.Node = function(x, y, id) {
+var Node = function(x, y, id) {
 	this.x = x;
 	this.y = y;
 	this.id = 'node' + id;
@@ -45,7 +45,7 @@ Game.prototype.Node = function(x, y, id) {
 	}
 };
 
-Game.prototype.Edge = function(startNode, endNode, id) {
+var Edge = function(startNode, endNode, id) {
 	this.startNode = startNode;
 	this.endNode = endNode;
 	this.id = 'edge' + id;
@@ -64,9 +64,8 @@ Game.prototype.Shape = function(shapeData) {
 	this.height = shapeData.height;
 	this.width = shapeData.width;
 	this.noOfEdgeVisited = 0;
-	var game = Game.prototype;
 	this.nodes = shapeData.nodesData.map(function(nodeData, index) {
-		return new game.Node(nodeData[0], nodeData[1], index);
+		return new Node(nodeData[0], nodeData[1], index);
 	});
 	var shape = this;
 	this.edges = shapeData.edgesData.map(function(edgeData, index) {
@@ -82,7 +81,7 @@ Game.prototype.Shape = function(shapeData) {
 				y: edgeData[3]
 			});
 		})[0];
-		var edge = new game.Edge(start, end, index);
+		var edge = new Edge(start, end, index);
 		start.addEdge(edge);
 		end.addEdge(edge);
 		return edge;
