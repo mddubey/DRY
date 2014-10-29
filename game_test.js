@@ -324,4 +324,26 @@ describe('Game', function() {
 			assert.isTrue(controller.onGameFinishedCalled);
 		});
 	});
+	describe('restartLevel', function() {
+		it('should reset the shape on restart of a level.', function() {
+			game.selectNode('node1');
+			var edgeID = 'edge0';
+			var edge = game.getEdgeById(edgeID);
+			game.visitEdge(edgeID);
+			assert.equal(game.noOfEdgeVisited, 1);
+			game.restartLevel();
+			assert.equal(game.noOfEdgeVisited, 0);
+		});
+
+		it('should inform controller when level is restart.', function() {
+			game.selectNode('node1');
+			var edgeID = 'edge0';
+			var edge = game.getEdgeById(edgeID);
+			game.visitEdge(edgeID);
+			assert.equal(controller.onLevelRestartCalled, 0);
+			game.restartLevel();
+			assert.equal(controller.onLevelRestartCalled, 1);
+		});
+	});
+
 });
