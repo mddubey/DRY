@@ -1,5 +1,30 @@
-var Game = function() {
+var Game = function(controller,shapesData,noOfLevels) {
+	var shapeData = {
+		"height": 400,
+		"width": 400,
+		"nodesData": [
+			[20, 20],
+			[320, 20],
+			[20, 320],
+			[320, 320]
+		],
+		"edgesData": [
+			[20, 20, 320, 20],
+			[20, 320, 320, 320],
+			[20, 20, 20, 320],
+			[320, 20, 320, 320]
+		]
+	};
+	this.level = 1;
+	this.noOfLevels = noOfLevels || 1;
+	this.controller = controller;
+	this.shapesData = shapesData || [shapeData];
+	this.shape = new Game.prototype.Shape(this.shapesData[0]);
+};
 
+Game.prototype.visit = function(visitor){
+	this.shape.edges.forEach(visitor.renderEdge);
+	this.shape.nodes.forEach(visitor.renderNode);
 };
 
 Game.prototype.Node = function(x, y, id) {
@@ -69,12 +94,12 @@ Game.prototype.Shape = function(shapeData) {
 	};
 
 	this.isLevelComplete = function() {
-		return this.noOfEdgeVisited == this.edges.length;
+		return this.noOfEdgeVisited === this.edges.length;
 	};
 
 	this.getNodeById = function(nodeIdToFind) {
 		return shape.nodes.filter(function(node) {
-			return node.id == nodeIdToFind;
+			return node.id === nodeIdToFind;
 		})[0];
 	}
 };
@@ -86,33 +111,7 @@ Game.prototype.selectNode = function(nodeId) {
 		return;
 	}
 	this.controller.onStartNodeAlreadySelected(nodeId);
-}
-
-Game.prototype.startGame = function(controller) {
-	var shapeData = {
-		"height": 400,
-		"width": 400,
-		"nodesData": [
-			[20, 20],
-			[320, 20],
-			[20, 320],
-			[320, 320]
-		],
-		"edgesData": [
-			[20, 20, 320, 20],
-			[20, 320, 320, 320],
-			[20, 20, 20, 320],
-			[320, 20, 320, 320]
-		]
-	};
-	this.level = 1;
-	this.noOfLevels = 1;
-	this.controller = controller;
-	this.shapesData = [shapeData];
-	this.shape = new Game.prototype.Shape(this.shapesData[0]);
-	this.controller.onShapeReady(this.shape);
 };
-
 
 Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.shape.getEdgeById(edgeID);

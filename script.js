@@ -1,33 +1,35 @@
-var controller = {};
+var presenter = {};
 
-controller.onShapeReady = function(shape) {
+var onShapeReady = function(shape) {
 	var container = $('#container');
-	var svgHTML = '<svg width="' + shape.width + '" height="' + shape.height + '">';
-	shape.edges.forEach(function(edge) {
+	var svgHTML = '<svg width="400" height="400">';
+	var visitor = {};
+	visitor.renderEdge = function(edge){
 		var lineHTML = '<line id="ID" x1="X1" y1="Y1" x2="X2" y2="Y2"/>';
 		lineHTML = lineHTML.replace('ID', edge.id).replace('X1', edge.startNode.x).replace('Y1', edge.startNode.y).replace('X2', edge.endNode.x).replace('Y2', edge.endNode.y);
 		svgHTML += lineHTML;
-	});
-	shape.nodes.forEach(function(node) {
+	};
+	visitor.renderNode = function(node) {
 		var circleHTML = '<circle id="ID" cx="CX" cy="CY" r="15" stroke="black" stroke-width="3" fill="skyblue"/>';
 		circleHTML = circleHTML.replace('ID', node.id).replace('CX', node.x).replace('CY', node.y);
 		svgHTML += circleHTML;
-	});
+	};
+	presenter.game.visit(visitor);
 	svgHTML += '</svg>';
 	container.html(svgHTML);
 };
 
-controller.onEdgeVisited = function(edgeID) {
+presenter.onEdgeVisited = function(edgeID) {
 	$('#' + edgeID).attr('class','visited');
 };
 
-controller.onNodeSelected = function(nodeID) {
+presenter.onNodeSelected = function(nodeID) {
 	var circles = $('circle');
 	circles.attr('fill', 'skyblue');
 	$('#' + nodeID).attr('fill', 'pink');
 };
 
-controller.onLevelComplete = function(){
+presenter.onLevelComplete = function(){
 	// showErrorMessage('You have completed this level.');
 }
 
@@ -41,44 +43,44 @@ var showErrorMessage = function(message){
 };
 
 
-controller.onStartNodeAlreadySelected = function(nodeID) {
+presenter.onStartNodeAlreadySelected = function(nodeID) {
 	showErrorMessage('You have already selected the starting node.');
 };
 	
-controller.onNonAdjacentVisit = function(){
+presenter.onNonAdjacentVisit = function(){
 	showErrorMessage('You can visit just adjacent edges to current node.');
 };
 
-controller.onStartNodeNotSelected = function() {
+presenter.onStartNodeNotSelected = function() {
 	showErrorMessage('Please select a node as starting point to start the game.');
 };
 
-controller.onEdgeRevisit = function(){
+presenter.onEdgeRevisit = function(){
 	showErrorMessage('You can not visit an edge twice.');
 };
 
-controller.onGameFinished = function () {
+presenter.onGameFinished = function () {
 	$('#container').hide();
 	$('#error').hide();
 	$('#finish').show();
 };
 
-controller.onLevelRestart = function(shape){
-	controller.onShapeReady(shape);
+presenter.onLevelRestart = function(shape){
+	presenter.onShapeReady(shape);
 };
 
 var init = function() {
-	var game = new Game();
-	game.startGame(controller);
+	presenter.game = new Game(presenter);
+	onShapeReady();
 	$('#container').on('click', 'line', function() {
 		var edgeID = $(this).attr('id');
-		game.visitEdge(edgeID);
+		presenter.game.visitEdge(edgeID);
 	});
 	$('#container').on('click', 'circle', function() {
-		game.selectNode(this.id);
+		presenter.game.selectNode(this.id);
 	});
 	$('#resetLevel').click(function(){
-		game.restartLevel();
+		presenter.game.restartLevel();
 	})
 };
 
