@@ -1,32 +1,3 @@
-var Game = function(controller,shapesData,noOfLevels) {
-	var shapeData = {
-		"height": 400,
-		"width": 400,
-		"nodesData": [
-			[20, 20],
-			[320, 20],
-			[20, 320],
-			[320, 320]
-		],
-		"edgesData": [
-			[20, 20, 320, 20],
-			[20, 320, 320, 320],
-			[20, 20, 20, 320],
-			[320, 20, 320, 320]
-		]
-	};
-	this.level = 1;
-	this.noOfLevels = noOfLevels || 1;
-	this.controller = controller;
-	this.shapesData = shapesData || [shapeData];
-	this.shape = new Game.prototype.Shape(this.shapesData[0]);
-};
-
-Game.prototype.visit = function(visitor){
-	this.shape.edges.forEach(visitor.renderEdge);
-	this.shape.nodes.forEach(visitor.renderNode);
-};
-
 var Node = function(x, y, id) {
 	this.x = x;
 	this.y = y;
@@ -38,8 +9,8 @@ var Node = function(x, y, id) {
 	this.addEdge = function(edge) {
 		this.edges.push(edge);
 	};
-	this.isEdgeAdjacent = function(edge){
-		return this.edges.some(function(edge1){
+	this.isEdgeAdjacent = function(edge) {
+		return this.edges.some(function(edge1) {
 			return edge.id === edge1.id;
 		});
 	}
@@ -60,15 +31,15 @@ var Edge = function(startNode, endNode, id) {
 	}
 };
 
-Game.prototype.Shape = function(shapeData) {
-	this.height = shapeData.height;
-	this.width = shapeData.width;
-	this.noOfEdgeVisited = 0;
-	this.nodes = shapeData.nodesData.map(function(nodeData, index) {
+var createShape = function(shapeData) {
+	var shape = {};
+	shape.height = shapeData.height;
+	shape.width = shapeData.width;
+	shape.noOfEdgeVisited = 0;
+	shape.nodes = shapeData.nodesData.map(function(nodeData, index) {
 		return new Node(nodeData[0], nodeData[1], index);
 	});
-	var shape = this;
-	this.edges = shapeData.edgesData.map(function(edgeData, index) {
+	shape.edges = shapeData.edgesData.map(function(edgeData, index) {
 		var start = shape.nodes.filter(function(node) {
 			return node.isEqualTo({
 				x: edgeData[0],
@@ -86,26 +57,59 @@ Game.prototype.Shape = function(shapeData) {
 		end.addEdge(edge);
 		return edge;
 	});
-	this.getEdgeById = function(edgeID) {
-		return this.edges.filter(function(edge) {
-			return edge.id === edgeID;
-		})[0];
-	};
-
-	this.isLevelComplete = function() {
-		return this.noOfEdgeVisited === this.edges.length;
-	};
-
-	this.getNodeById = function(nodeIdToFind) {
-		return shape.nodes.filter(function(node) {
-			return node.id === nodeIdToFind;
-		})[0];
-	}
+	return shape;
 };
+
+var Game = function(controller, shapesData, noOfLevels) {
+	var shapeData = {
+		"height": 400,
+		"width": 400,
+		"nodesData": [
+			[20, 20],
+			[320, 20],
+			[20, 320],
+			[320, 320]
+		],
+		"edgesData": [
+			[20, 20, 320, 20],
+			[20, 320, 320, 320],
+			[20, 20, 20, 320],
+			[320, 20, 320, 320]
+		]
+	};
+	this.level = 1;
+	this.noOfLevels = noOfLevels || 1;
+	this.controller = controller;
+	this.shapesData = shapesData || [shapeData];
+	this.shape = createShape(this.shapesData[0]);
+};
+
+Game.prototype.getEdgeById = function(edgeID) {
+	return this.shape.edges.filter(function(edge) {
+		return edge.id === edgeID;
+	})[0];
+};
+
+Game.prototype.isLevelComplete = function() {
+	return this.shape.noOfEdgeVisited === this.shape.edges.length;
+};
+
+Game.prototype.getNodeById = function(nodeIdToFind) {
+	return this.shape.nodes.filter(function(node) {
+		return node.id === nodeIdToFind;
+	})[0];
+}
+
+Game.prototype.visit = function(visitor) {
+	this.shape.edges.forEach(visitor.renderEdge);
+	this.shape.nodes.forEach(visitor.renderNode);
+};
+
+
 
 Game.prototype.selectNode = function(nodeId) {
 	if (!this.currentNode) {
-		this.currentNode = this.shape.getNodeById(nodeId);
+		this.currentNode = this.getNodeById(nodeId);
 		this.controller.onNodeSelected(nodeId);
 		return;
 	}
@@ -113,27 +117,27 @@ Game.prototype.selectNode = function(nodeId) {
 };
 
 Game.prototype.visitEdge = function(edgeID) {
-	var edge = this.shape.getEdgeById(edgeID);
-	if(!this.currentNode){
+	var edge = this.getEdgeById(edgeID);
+	if (!this.currentNode) {
 		this.controller.onStartNodeNotSelected();
 		return;
 	}
-	if(edge.visited){
+	if (edge.visited) {
 		this.controller.onEdgeRevisit();
 		return;
 	}
-	if(!this.currentNode.isEdgeAdjacent(edge)){
+	if (!this.currentNode.isEdgeAdjacent(edge)) {
 		this.controller.onNonAdjacentVisit();
 		return;
 	}
 	edge.visited = true;
-	this.shape.noOfEdgeVisited ++;
+	this.shape.noOfEdgeVisited++;
 	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);
 	this.controller.onNodeSelected(this.currentNode.id);
-	
-	if(this.shape.isLevelComplete()){
-		if(this.level === this.noOfLevels){
+
+	if (this.isLevelComplete()) {
+		if (this.level === this.noOfLevels) {
 			this.controller.onGameFinished();
 			return;
 		}
@@ -141,8 +145,8 @@ Game.prototype.visitEdge = function(edgeID) {
 	}
 };
 
-Game.prototype.restartLevel = function () {
-	this.shape = new Game.prototype.Shape(this.shapesData[this.level - 1]);
+Game.prototype.restartLevel = function() {
+	this.shape = createShape(this.shapesData[this.level - 1]);
 	this.currentNode = '';
 	this.controller.onLevelRestart(this.shape);
 };
