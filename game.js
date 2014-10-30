@@ -57,7 +57,7 @@ var createShape = function(game) {
 	});
 };
 
-var Game = function(controller, shapesData, noOfLevels) {
+var Game = function(shapesData, noOfLevels) {
 	var shapeData = {
 		"nodesData": [
 			[20, 20],
@@ -74,7 +74,6 @@ var Game = function(controller, shapesData, noOfLevels) {
 	};
 	this.level = 1;
 	this.noOfLevels = noOfLevels || 1;
-	this.controller = controller;
 	this.shapesData = shapesData || [shapeData];
 	createShape(this);
 };
@@ -103,43 +102,36 @@ Game.prototype.visit = function(visitor) {
 Game.prototype.selectNode = function(nodeId) {
 	if (!this.currentNode) {
 		this.currentNode = this.getNodeById(nodeId);
-		this.controller.onNodeSelected(nodeId);
-		return;
+		return {statusCode:301};
 	}
-	this.controller.onStartNodeAlreadySelected(nodeId);
+	return {statusCode:401};
 };
 
 Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.getEdgeById(edgeID);
 	if (!this.currentNode) {
-		this.controller.onStartNodeNotSelected();
-		return;
+		return {statusCode:402};
 	}
 	if (edge.visited) {
-		this.controller.onEdgeRevisit();
-		return;
+		return {statusCode:403};
 	}
 	if (!this.currentNode.isEdgeAdjacent(edge)) {
-		this.controller.onNonAdjacentVisit();
-		return;
+		return {statusCode:404};
 	}
 	edge.visited = true;
 	this.noOfEdgeVisited++;
-	this.controller.onEdgeVisited(edgeID);
 	this.currentNode = edge.getOtherNode(this.currentNode);
-	this.controller.onNodeSelected(this.currentNode.id);
 
 	if (this.isLevelComplete()) {
 		if (this.level === this.noOfLevels) {
-			this.controller.onGameFinished();
-			return;
+			return {statusCode:304}; //game finished
 		}
-		this.controller.onLevelComplete();
+		return {statusCode:303};
 	}
+	return {statusCode:302,nodeId:this.currentNode.id};
 };
 
 Game.prototype.restartLevel = function() {
 	createShape(this);
 	this.currentNode = undefined;
-	this.controller.onLevelRestart();
 };

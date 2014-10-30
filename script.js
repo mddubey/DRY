@@ -1,4 +1,20 @@
 var presenter = {};
+var performAction = function(info,id){
+	var dictionary = {
+		"action301" : presenter.onNodeSelected,
+		"action302" : presenter.onEdgeVisited,
+		"action304" : presenter.onGameFinished,
+
+		"error401" : presenter.onStartNodeAlreadySelected,
+		"error402" : presenter.onStartNodeNotSelected,
+		"error403" : presenter.onEdgeRevisit,
+		"error404" : presenter.onNonAdjacentVisit
+	};
+	if(info.statusCode < 400)
+		dictionary["action" + info.statusCode](id,info);
+	else dictionary["error" + info.statusCode](id);
+};
+
 
 var onShapeReady = function(shape) {
 	var container = $('#container');
@@ -19,8 +35,9 @@ var onShapeReady = function(shape) {
 	container.html(svgHTML);
 };
 
-presenter.onEdgeVisited = function(edgeID) {
+presenter.onEdgeVisited = function(edgeID,info) {
 	$('#' + edgeID).attr('class','visited');
+	presenter.onNodeSelected(info.nodeId);
 };
 
 presenter.onNodeSelected = function(nodeID) {
@@ -35,7 +52,7 @@ presenter.onLevelComplete = function(){
 
 var showErrorMessage = function(message){
 	var error = $('#error');
-	error.show();
+	error.fadeIn(1000);
 	error.find('h2').text(message);
 	setTimeout(function(){
 		error.fadeOut(1000);
@@ -65,22 +82,22 @@ presenter.onGameFinished = function () {
 	$('#finish').show();
 };
 
-presenter.onLevelRestart = function(shape){
-	presenter.onShapeReady(shape);
-};
-
 var init = function() {
-	presenter.game = new Game(presenter);
+	presenter.game = new Game();
 	onShapeReady();
 	$('#container').on('click', 'line', function() {
 		var edgeID = $(this).attr('id');
-		presenter.game.visitEdge(edgeID);
+		var info = presenter.game.visitEdge(edgeID);
+		performAction(info,edgeID);
 	});
 	$('#container').on('click', 'circle', function() {
-		presenter.game.selectNode(this.id);
+		var nodeID = $(this).attr('id');
+		var info = presenter.game.selectNode(nodeID);
+		performAction(info,nodeID);
 	});
 	$('#resetLevel').click(function(){
 		presenter.game.restartLevel();
+		onShapeReady();
 	})
 };
 
