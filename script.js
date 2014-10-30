@@ -77,7 +77,7 @@ presenter.onEdgeRevisit = function(){
 };
 
 presenter.onGameFinished = function () {
-	$('#container').hide();
+	$('#main').hide();
 	$('#error').hide();
 	$('#finish').show();
 };
