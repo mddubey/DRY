@@ -33,7 +33,6 @@ var Edge = function(startNode, endNode, id) {
 
 var createShape = function(game) {
 	var shapeData = game.shapesData[game.level - 1];
-	console.log(shapeData.edgesData);
 	game.noOfEdgeVisited = 0;
 	game.nodes = shapeData.nodesData.map(function(nodeData, index) {
 		return new Node(nodeData[0], nodeData[1], index);

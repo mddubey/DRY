@@ -50,18 +50,22 @@ presenter.onNodeSelected = function(nodeID) {
 presenter.onLevelComplete = function(edgeID, info) {
 	presenter.onEdgeVisited(edgeID, info);
 	setTimeout(function() {
-		$('#main').hide();
 		$('#error').hide();
+		$('#container').hide();
 		$('#finish').hide();
 		$('#Level').show();
-	},500);
+		$('#resetLevel').hide();
+	}, 500);
 };
 
 var showErrorMessage = function(message) {
 	var error = $('#error');
+	var container = $('#container');
 	error.fadeIn(1000);
+	container.fadeOut(1000);
 	error.find('h2').text(message);
 	setTimeout(function() {
+		container.fadeIn(1000);
 		error.fadeOut(1000);
 	}, 3000);
 };
@@ -84,9 +88,10 @@ presenter.onEdgeRevisit = function() {
 };
 
 presenter.onGameFinished = function() {
-	$('#main').hide();
+	$('#container').hide();
 	$('#error').hide();
 	$('#Level').hide();
+	$('#resetLevel').hide();
 	$('#finish').show();
 };
 
@@ -107,13 +112,14 @@ var init = function() {
 		presenter.game.restartLevel();
 		onShapeReady();
 	});
-	$('#changeLevel').click(function(){
+	$('#changeLevel').click(function() {
 		presenter.game.swicthToNextLevel();
 		onShapeReady();
 		$('#error').hide();
-		$('#finish').hide();
 		$('#Level').hide();
-		$('#main').show();
+		$('#finish').hide();
+		$('#container').show();
+		$('#resetLevel').show();
 	})
 };
 

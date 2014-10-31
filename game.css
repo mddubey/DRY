@@ -1,7 +1,10 @@
+
 .notify{
 	text-align: center;
-	font-size: 110%;
+	font-size: 100%;
 	display: none;
+	margin-left: 36%;
+
 }
 #finish{
 	color: blue;
@@ -15,21 +18,40 @@ line{
 }
 #error{
 	color: red;
+	height: 380px;
+	width: 300px;
+	background-repeat: no-repeat;
+	background: url(monkey.png);
 }
-#error img{
-	height: 200px;
-}	
-svg{
-	margin:auto auto;
-	display: block;
+
+#errorMsg {
+	position: relative;
+	top: 75%;
+	max-width: 70%;
+	margin: 0 auto;
 }
+
 #main{
+	margin: 0 auto;
+	background: url(back.jpg);
+	width: 1024px;
+	height: 720px;
+}
+
+#container{
 	position: absolute;
+	margin-left: 19%;
 	top: 30%;
-	left: 40%;
-	/*background-color: gray;*/
-	padding-top: 1%;
-	/*width: 400px;*/
-	/*height: 400px;*/
-	padding-left: 2%;
+}
+
+@media (max-width: 1440px) {
+	#container{
+		margin-left: 24%;
+	}		
+}
+
+@media (max-width: 1280px) {
+	#container{
+		margin-left: 28%;
+	}		
 }

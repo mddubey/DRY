@@ -8,20 +8,21 @@
     <link rel="stylesheet" type="text/css" href="game.css">
 </head>
 <body>
-    <div id="error" class="notify">
-        <h2></h2>
-        <img src="error.gif" alt="Error">
-    </div>
-    <div id="Level" class="notify">
-        <h2>Congrats! Level Finished</h2>
-        <button id="changeLevel">Next Level</button>
-    </div>        
-    <div id="finish" class="notify">
-        <h2>Congratulations!</h2>
-        <img src="You-win.gif" alt="You won">
-    </div>        
     <div id="main">
+        <div id="Level" class="notify">
+            <h2>Congrats! Level Finished</h2>
+            <button id="changeLevel">Next Level</button>
+        </div>        
+        <div id="finish" class="notify">
+            <h2>Congratulations!</h2>
+            <img src="You-win.gif" alt="You won">
+        </div>        
         <div id="container"></div>        
+        <div id="error" class="notify">
+            <div id="errorMsg">
+                <h2></h2>
+            </div>
+        </div>        
         <button id="resetLevel">Restart Level</button>    
     </div>
 </body>
