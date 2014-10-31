@@ -69,8 +69,6 @@ describe('Edge', function() {
 
 describe('Game', function() {
 	var shapeData = {
-		"height": 400,
-		"width": 400,
 		"nodesData": [
 			[20, 20],
 			[320, 20],
@@ -130,8 +128,6 @@ describe('Game', function() {
 	describe('isLevelComplete', function() {
 		it('Should tell if level is complete.', function() {
 			var shapeData = {
-				"height": 400,
-				"width": 400,
 				"nodesData": [
 					[20, 20],
 					[320, 20]
@@ -276,15 +272,23 @@ describe('Game', function() {
 			assert.deepEqual(result, expected);
 		});
 
-		// it('should notify controller when level is completed.', function() {
-		// 	game.selectNode('node0');
-		// 	['edge0', 'edge3', 'edge1'].forEach(function(edge) {
-		// 		game.visitEdge(edge);
-		// 		assert.isFalse(controller.onLevelCompleteCalled);
-		// 	});
-		// 	game.visitEdge('edge2');
-		// 	assert.isTrue(controller.onLevelCompleteCalled);
-		// });
+		it('should give success code,and current node id when level is complete.', function() {
+			var shapeData1 = {
+				"nodesData": [
+					[20, 20],
+					[320, 20]
+				],
+				"edgesData": [
+					[20, 20, 320, 20]
+				]
+			};
+			var levelFinishCode = 303;
+			var game = new Game([shapeData1,shapeData]);
+			game.selectNode('node0');
+			var result = game.visitEdge('edge0');
+			var expected = {statusCode:levelFinishCode,nodeId:'node1'};
+			assert.deepEqual(result,expected);			
+		});
 
 		it('should give success statusCode as game finished when all levels are completed.', function() {
 			var gameFinishedCode = 304;

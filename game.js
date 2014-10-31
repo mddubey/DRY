@@ -32,7 +32,8 @@ var Edge = function(startNode, endNode, id) {
 };
 
 var createShape = function(game) {
-	var shapeData = game.shapesData[game.level-1];
+	var shapeData = game.shapesData[game.level - 1];
+	console.log(shapeData.edgesData);
 	game.noOfEdgeVisited = 0;
 	game.nodes = shapeData.nodesData.map(function(nodeData, index) {
 		return new Node(nodeData[0], nodeData[1], index);
@@ -57,8 +58,17 @@ var createShape = function(game) {
 	});
 };
 
-var Game = function(shapesData, noOfLevels) {
-	var shapeData = {
+var Game = function(shapesData) {
+	var shapeData1 = {
+		"nodesData": [
+			[20, 20],
+			[320, 20]
+		],
+		"edgesData": [
+			[20, 20, 320, 20]
+		]
+	};
+	var shapeData2 = {
 		"nodesData": [
 			[20, 20],
 			[320, 20],
@@ -72,9 +82,24 @@ var Game = function(shapesData, noOfLevels) {
 			[320, 20, 320, 320]
 		]
 	};
+	var shapeData3 = {
+		"nodesData": [
+			[170, 20],
+			[20, 320],
+			[170, 170],
+			[320, 320]
+		],
+		"edgesData": [
+			[170, 20, 20, 320],
+			[170, 20, 170, 170],
+			[170, 20, 320, 320],
+			[20, 320, 170, 170],
+			[170, 170, 320, 320]
+		]
+	};
 	this.level = 1;
-	this.noOfLevels = noOfLevels || 1;
-	this.shapesData = shapesData || [shapeData];
+	this.shapesData = shapesData || [shapeData1, shapeData2, shapeData3];
+	this.noOfLevels = this.shapesData.length;
 	createShape(this);
 };
 
@@ -102,21 +127,31 @@ Game.prototype.visit = function(visitor) {
 Game.prototype.selectNode = function(nodeId) {
 	if (!this.currentNode) {
 		this.currentNode = this.getNodeById(nodeId);
-		return {statusCode:301};
+		return {
+			statusCode: 301
+		};
 	}
-	return {statusCode:401};
+	return {
+		statusCode: 401
+	};
 };
 
 Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.getEdgeById(edgeID);
 	if (!this.currentNode) {
-		return {statusCode:402};
+		return {
+			statusCode: 402
+		};
 	}
 	if (edge.visited) {
-		return {statusCode:403};
+		return {
+			statusCode: 403
+		};
 	}
 	if (!this.currentNode.isEdgeAdjacent(edge)) {
-		return {statusCode:404};
+		return {
+			statusCode: 404
+		};
 	}
 	edge.visited = true;
 	this.noOfEdgeVisited++;
@@ -124,14 +159,28 @@ Game.prototype.visitEdge = function(edgeID) {
 
 	if (this.isLevelComplete()) {
 		if (this.level === this.noOfLevels) {
-			return {statusCode:304}; //game finished
+			return {
+				statusCode: 304
+			}; //game finished
 		}
-		return {statusCode:303};
+		return {
+			statusCode: 303,
+			nodeId: this.currentNode.id
+		}; //level finished
 	}
-	return {statusCode:302,nodeId:this.currentNode.id};
+	return {
+		statusCode: 302,
+		nodeId: this.currentNode.id
+	};
 };
 
 Game.prototype.restartLevel = function() {
 	createShape(this);
 	this.currentNode = undefined;
+};
+
+Game.prototype.swicthToNextLevel = function() {
+	this.level++;
+	this.currentNode = undefined;
+	createShape(this);
 };
