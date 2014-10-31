@@ -58,46 +58,9 @@ var createShape = function(game) {
 };
 
 var Game = function(shapesData) {
-	var shapeData1 = {
-		"nodesData": [
-			[20, 20],
-			[320, 20]
-		],
-		"edgesData": [
-			[20, 20, 320, 20]
-		]
-	};
-	var shapeData2 = {
-		"nodesData": [
-			[20, 20],
-			[320, 20],
-			[20, 320],
-			[320, 320]
-		],
-		"edgesData": [
-			[20, 20, 320, 20],
-			[20, 320, 320, 320],
-			[20, 20, 20, 320],
-			[320, 20, 320, 320]
-		]
-	};
-	var shapeData3 = {
-		"nodesData": [
-			[170, 20],
-			[20, 320],
-			[170, 170],
-			[320, 320]
-		],
-		"edgesData": [
-			[170, 20, 20, 320],
-			[170, 20, 170, 170],
-			[170, 20, 320, 320],
-			[20, 320, 170, 170],
-			[170, 170, 320, 320]
-		]
-	};
+	// var shapesData = [];
 	this.level = 1;
-	this.shapesData = shapesData || [shapeData1, shapeData2, shapeData3];
+	this.shapesData = shapesData || x; // || [shapeData1, shapeData2, shapeData3];
 	this.noOfLevels = this.shapesData.length;
 	createShape(this);
 };
