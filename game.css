@@ -68,10 +68,6 @@ line{
 .myButton:hover {
 	background-color:#5cbf2a;
 }
-.myButton:active {
-	position:relative;
-	top:1px;
-}
 
 @media (max-width: 1440px) {
 	#container{
