@@ -46,8 +46,8 @@ line{
 }
 
 .myButton {
-	position: relative;
-	top: 75%;
+	position: absolute;
+	top: 60%;
 
 	background-color:#18ab29;
 	-moz-border-radius:28px;
