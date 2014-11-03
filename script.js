@@ -53,7 +53,7 @@ presenter.onLevelComplete = function(edgeID, info) {
 		$('#error').hide();
 		$('#container').hide();
 		$('#finish').hide();
-		$('#Level').show();
+		$('#level').show();
 		$('#resetLevel').hide();
 	}, 500);
 };
@@ -61,12 +61,12 @@ presenter.onLevelComplete = function(edgeID, info) {
 var showErrorMessage = function(message) {
 	var error = $('#error');
 	var container = $('#container');
-	error.fadeIn(1000);
-	container.fadeOut(1000);
+	error.fadeIn(800);
+	container.fadeOut(800);
 	error.find('h2').text(message);
 	setTimeout(function() {
-		container.fadeIn(1000);
-		error.fadeOut(1000);
+		container.fadeIn(800);
+		error.fadeOut(800);
 	}, 3000);
 };
 
@@ -90,7 +90,7 @@ presenter.onEdgeRevisit = function() {
 presenter.onGameFinished = function() {
 	$('#container').hide();
 	$('#error').hide();
-	$('#Level').hide();
+	$('#level').hide();
 	$('#resetLevel').hide();
 	$('#finish').show();
 };
@@ -116,7 +116,7 @@ var init = function() {
 		presenter.game.swicthToNextLevel();
 		onShapeReady();
 		$('#error').hide();
-		$('#Level').hide();
+		$('#level').hide();
 		$('#finish').hide();
 		$('#container').show();
 		$('#resetLevel').show();
