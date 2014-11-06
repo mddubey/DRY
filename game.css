@@ -11,6 +11,20 @@ div,h2{
 	top: 50%;
 	position: relative;
 }
+#changeLevel{
+	background-color:#18ab29;
+	border-radius:28px;
+	border:1px solid #44c767;
+	color:#ffffff;
+	font-family:arial;
+	font-size:20px;
+	height: 50px;
+	width: 150px;
+}
+
+.myButton:hover {
+background-color:#5cbf2a;
+}
 #finish{
 	color: blue;
 }
