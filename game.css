@@ -8,7 +8,7 @@ div,h2{
 .notify{
 	text-align: center;
 	display: none;
-	top: 50%;
+	padding-top: 34%;
 	position: relative;
 }
 #changeLevel{
