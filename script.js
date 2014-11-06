@@ -55,6 +55,7 @@ presenter.onLevelComplete = function(edgeID, info) {
 		$('#finish').hide();
 		$('#level').show();
 		$('#resetLevel').hide();
+		$('#instruction').hide();
 	}, 500);
 };
 
