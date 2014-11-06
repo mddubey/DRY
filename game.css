@@ -70,6 +70,9 @@ line{
 	text-decoration:none;
 	text-shadow:0px 1px 0px #2f6627;
 }
+.myButton:hover {
+	background-color:#5cbf2a;
+}
 .playGame {
 	position: absolute;
 	top: 75%;
@@ -90,8 +93,25 @@ line{
 	height: 10%;
 	width: 25%;
 }
-.myButton:hover {
-	background-color:#5cbf2a;
+#movesFinished{
+	position: relative;
+	padding-top: 7%;
+	top: 35%;
+	opacity: 0.9;
+	background-color: #D3F5EA;
+	height: 37%;
+	margin: 0 auto;
+	text-align: center;
+	z-index: 999;
+	display: none;
+}
+
+#movesFinished .myButton{
+	position: relative;
+}
+
+#movesFinished .resetLevel{
+	top: 15%;
 }
 
 @media (max-width: 1440px) {

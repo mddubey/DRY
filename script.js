@@ -9,11 +9,12 @@ var performAction = function(info, id) {
 		"error401": presenter.onStartNodeAlreadySelected,
 		"error402": presenter.onStartNodeNotSelected,
 		"error403": presenter.onEdgeRevisit,
-		"error404": presenter.onNonAdjacentVisit
+		"error404": presenter.onNonAdjacentVisit,
+		"error405": presenter.onNoPossibleMoves
 	};
 	if (info.statusCode < 400)
 		dictionary["action" + info.statusCode](id, info);
-	else dictionary["error" + info.statusCode](id);
+	else dictionary["error" + info.statusCode](id,info);
 };
 
 
@@ -54,8 +55,8 @@ presenter.onLevelComplete = function(edgeID, info) {
 		$('#container').hide();
 		$('#finish').hide();
 		$('#level').show();
-		$('#resetLevel').hide();
 		$('#instruction').hide();
+		$('.resetLevel').hide();
 	}, 500);
 };
 
@@ -104,11 +105,19 @@ presenter.onEdgeRevisit = function() {
 	showErrorMessage('You can not visit an edge twice.');
 };
 
+presenter.onNoPossibleMoves = function(edgeID, info) {
+	presenter.onEdgeVisited(edgeID, info);
+	setTimeout(function(){
+		$('#movesFinished').show();
+		// showErrorMessage('There are no possible moves, Please restart Level!');
+	},500);
+};
+
 presenter.onGameFinished = function() {
 	$('#container').hide();
 	$('#error').hide();
 	$('#level').hide();
-	$('#resetLevel').hide();
+	$('.resetLevel').hide();
 	$('#finish').show();
 };
 
@@ -125,9 +134,10 @@ var init = function() {
 		var info = presenter.game.selectNode(nodeID);
 		performAction(info, nodeID);
 	});
-	$('#resetLevel').click(function() {
+	$('.resetLevel').click(function() {
 		presenter.game.restartLevel();
 		onShapeReady();
+		$('#movesFinished').hide();
 	});
 	$('#changeLevel').click(function() {
 		presenter.game.swicthToNextLevel();
@@ -136,7 +146,7 @@ var init = function() {
 		$('#level').hide();
 		$('#finish').hide();
 		$('#container').show();
-		$('#resetLevel').show();
+		$('.resetLevel').show();
 	})
 };
 
