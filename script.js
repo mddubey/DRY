@@ -111,7 +111,6 @@ presenter.onNoPossibleMoves = function(edgeID, info) {
 	presenter.onEdgeVisited(edgeID, info);
 	setTimeout(function(){
 		$('#movesFinished').show();
-		// showErrorMessage('There are no possible moves, Please restart Level!');
 	},500);
 };
 
