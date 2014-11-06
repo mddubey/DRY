@@ -1,6 +1,10 @@
 .instruction{
 	max-width: 100%;
 }
+div,h2{
+	font-family: verdana, helvetica, arial, sans-serif;
+	font-size: 19px;
+}
 .notify{
 	text-align: center;
 	display: none;
@@ -18,8 +22,9 @@ line{
 	stroke: rgb(0,200,0);
 }
 #error{
+	position: relative;
 	display: none;
-	margin-left: 36%;
+	margin-left: 65%;
 	color: red;
 	height: 380px;
 	width: 300px;
@@ -29,7 +34,7 @@ line{
 
 #errorMsg {
 	position: relative;
-	top: 75%;
+	top: 70%;
 	max-width: 70%;
 	margin: 0 auto;
 }
@@ -94,7 +99,7 @@ line{
 		margin-left: 24%;
 	}		
 	#error {
-		margin-left: 32%;
+		margin-left: 65%;
 	}
 }
 
@@ -103,6 +108,6 @@ line{
 		margin-left: 28%;
 	}
 	#error {
-		margin-left: 33%;
+		margin-left: 65%;
 	}		
 }

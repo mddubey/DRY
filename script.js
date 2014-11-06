@@ -62,13 +62,29 @@ presenter.onLevelComplete = function(edgeID, info) {
 var showErrorMessage = function(message) {
 	var error = $('#error');
 	var container = $('#container');
-	error.fadeIn(800);
-	container.fadeOut(800);
 	error.find('h2').text(message);
+	error.animate({
+		height: "toggle",
+		display: 'inline-block'
+	}, 1000, function() {});
+	error.css({
+		display: 'inline-block'
+	});
+
+	container.css({
+		opacity: 0.5
+	});
+
 	setTimeout(function() {
-		container.fadeIn(800);
-		error.fadeOut(800);
+		error.animate({
+			height: "toggle"
+		}, 1000,function(){
+			container.css({
+				opacity: 1.0
+			});
+		});
 	}, 3000);
+	// Animation complete.
 };
 
 
