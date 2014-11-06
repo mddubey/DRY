@@ -111,6 +111,8 @@ presenter.onNoPossibleMoves = function(edgeID, info) {
 	presenter.onEdgeVisited(edgeID, info);
 	setTimeout(function(){
 		$('#movesFinished').show();
+		$('circle').prop('disabled',true);
+		$('line').prop('disabled',true);
 	},500);
 };
 
@@ -149,6 +151,7 @@ var init = function() {
 		$('#finish').hide();
 		$('#container').show();
 		$('.resetLevel').show();
+		$('#levelNumber').show();
 	});
 };
 

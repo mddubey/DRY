@@ -27,9 +27,10 @@ div,h2{
 	width: 150px;
 }
 #levelNumber{
-color: #0B0B61;
-font-family:arial;
-font-size:25px;
+	position: absolute;
+	color: #0B0B61;
+	font-family:arial;
+	font-size:25px;
 }
 .myButton:hover {
 background-color:#5cbf2a;
@@ -122,11 +123,11 @@ line{
 
 #movesFinished{
 	position: relative;
-	padding-top: 7%;
-	top: 35%;
+	padding-top: 2%;
+	top: 50%;
 	opacity: 0.9;
 	background-color: #D3F5EA;
-	height: 37%;
+	height: 30%;
 	margin: 0 auto;
 	text-align: center;
 	z-index: 999;
