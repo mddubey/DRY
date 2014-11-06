@@ -21,7 +21,11 @@ div,h2{
 	height: 50px;
 	width: 150px;
 }
-
+#levelNumber{
+color: #0B0B61;
+font-family:arial;
+font-size:25px;
+}
 .myButton:hover {
 background-color:#5cbf2a;
 }

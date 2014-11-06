@@ -35,6 +35,7 @@ var onShapeReady = function(shape) {
 	presenter.game.visit(visitor);
 	svgHTML += '</svg>';
 	container.html(svgHTML);
+	$("#levelNumber").text("Level ==>> " + presenter.game.level + "/" + presenter.game.noOfLevels);
 };
 
 presenter.onEdgeVisited = function(edgeID, info) {
@@ -57,6 +58,7 @@ presenter.onLevelComplete = function(edgeID, info) {
 		$('#level').show();
 		$('#instruction').hide();
 		$('.resetLevel').hide();
+		$('#levelNumber').hide();
 	}, 500);
 };
 
@@ -119,6 +121,7 @@ presenter.onGameFinished = function() {
 	$('#level').hide();
 	$('.resetLevel').hide();
 	$('#finish').show();
+	$('#levelNumber').hide();
 };
 
 var init = function() {
@@ -147,7 +150,7 @@ var init = function() {
 		$('#finish').hide();
 		$('#container').show();
 		$('.resetLevel').show();
-	})
+	});
 };
 
 $(document).ready(init);
