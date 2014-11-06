@@ -81,7 +81,7 @@ var showErrorMessage = function(message) {
 	setTimeout(function() {
 		error.animate({
 			height: "toggle"
-		}, 1000,function(){
+		}, 1000, function() {
 			container.css({
 				opacity: 1.0
 			});
