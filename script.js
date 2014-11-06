@@ -92,19 +92,19 @@ var showErrorMessage = function(message) {
 
 
 presenter.onStartNodeAlreadySelected = function(nodeID) {
-	showErrorMessage('You have already selected the starting node.');
+	showErrorMessage('You have to select a edge to continue the game.');
 };
 
 presenter.onNonAdjacentVisit = function() {
-	showErrorMessage('You can visit just adjacent edges to current node.');
+	showErrorMessage('You can only select the edge which is adjacent to current node.');
 };
 
 presenter.onStartNodeNotSelected = function() {
-	showErrorMessage('Please select a node as starting point to start the game.');
+	showErrorMessage('You need select a node to start the game.');
 };
 
 presenter.onEdgeRevisit = function() {
-	showErrorMessage('You can not visit an edge twice.');
+	showErrorMessage('This edge has been already visited.');
 };
 
 presenter.onNoPossibleMoves = function(edgeID, info) {
