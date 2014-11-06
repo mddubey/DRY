@@ -38,6 +38,22 @@ describe('Node', function() {
 			assert.isFalse(thirdNode.isEdgeAdjacent(edge));
 		});
 	});
+	describe('areAllEdgesVisited', function() {
+		it('should tell that all adjacent edges has been visited or not', function() {
+			var node = new Node(2, 3);
+			var otherNode = new Node(3, 3);
+			var thirdNode = new Node(5, 5);
+			var edge1 = new Edge(node, otherNode, 'edge1');
+			var edge2 = new Edge(node, thirdNode, 'edge2');
+			node.addEdge(edge1);
+			node.addEdge(edge2);
+			assert.isFalse(node.areAllEdgesVisited());
+			edge1.visited = true;
+			assert.isFalse(node.areAllEdgesVisited());
+			edge2.visited = true;
+			assert.isTrue(node.areAllEdgesVisited());
+		});
+	});
 });
 
 describe('Edge', function() {
@@ -84,7 +100,7 @@ describe('Game', function() {
 	};
 	var game;
 	beforeEach(function() {
-			game = new Game([shapeData]);
+		game = new Game([shapeData]);
 	});
 	describe('visit', function() {
 		it('should give a visit of each node and each edge to visitor', function() {
@@ -272,6 +288,35 @@ describe('Game', function() {
 			assert.deepEqual(result, expected);
 		});
 
+		it('should give failure statusCode when there are no possible moves', function() {
+			var shapeData = {
+				"nodesData": [
+					[170, 20],
+					[20, 320],
+					[170, 170],
+					[320, 320]
+				],
+				"edgesData": [
+					[170, 20, 20, 320],
+					[170, 20, 170, 170],
+					[170, 20, 320, 320],
+					[20, 320, 170, 170],
+					[170, 170, 320, 320]
+				]
+			};
+			var noPossibleMoveCode = 405;
+			var game = new Game([shapeData]);
+			game.selectNode('node1');
+			game.visitEdge('edge0');
+			game.visitEdge('edge1');
+			var result = game.visitEdge('edge3');
+			var expected = {
+				statusCode: noPossibleMoveCode,
+				nodeId:'node1'
+			};
+			assert.deepEqual(result, expected);
+		});
+
 		it('should give success code,and current node id when level is complete.', function() {
 			var shapeData1 = {
 				"nodesData": [
@@ -283,11 +328,14 @@ describe('Game', function() {
 				]
 			};
 			var levelFinishCode = 303;
-			var game = new Game([shapeData1,shapeData]);
+			var game = new Game([shapeData1, shapeData]);
 			game.selectNode('node0');
 			var result = game.visitEdge('edge0');
-			var expected = {statusCode:levelFinishCode,nodeId:'node1'};
-			assert.deepEqual(result,expected);			
+			var expected = {
+				statusCode: levelFinishCode,
+				nodeId: 'node1'
+			};
+			assert.deepEqual(result, expected);
 		});
 
 		it('should give success statusCode as game finished when all levels are completed.', function() {
@@ -297,8 +345,10 @@ describe('Game', function() {
 				game.visitEdge(edge);
 			});
 			var result = game.visitEdge('edge2');
-			var expected = {statusCode:gameFinishedCode};
-			assert.deepEqual(result,expected);
+			var expected = {
+				statusCode: gameFinishedCode
+			};
+			assert.deepEqual(result, expected);
 		});
 	});
 

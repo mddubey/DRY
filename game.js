@@ -14,6 +14,11 @@ var Node = function(x, y, id) {
 			return edge.id === edge1.id;
 		});
 	}
+	this.areAllEdgesVisited = function(){
+		return this.edges.every(function(edge){
+			return edge.visited;
+		});
+	}
 };
 
 var Edge = function(startNode, endNode, id) {
@@ -102,18 +107,18 @@ Game.prototype.visitEdge = function(edgeID) {
 	var edge = this.getEdgeById(edgeID);
 	if (!this.currentNode) {
 		return {
-			statusCode: 402
-		};
+			statusCode: 402 
+		}; //current node is not selected;
 	}
 	if (edge.visited) {
 		return {
 			statusCode: 403
-		};
+		}; // edge is being revisited
 	}
 	if (!this.currentNode.isEdgeAdjacent(edge)) {
 		return {
 			statusCode: 404
-		};
+		}; // non-adjacent node visit
 	}
 	edge.visited = true;
 	this.noOfEdgeVisited++;
@@ -130,6 +135,14 @@ Game.prototype.visitEdge = function(edgeID) {
 			nodeId: this.currentNode.id
 		}; //level finished
 	}
+
+	if(this.currentNode.areAllEdgesVisited()){
+		return {
+			statusCode : 405,
+			nodeId:this.currentNode.id
+		}; //no possible moves
+	}
+
 	return {
 		statusCode: 302,
 		nodeId: this.currentNode.id
