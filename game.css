@@ -134,6 +134,26 @@ line{
 	display: none;
 }
 
+#progress{
+	width: 3%;
+	height: 100%;
+	background-color: transparent;
+	float: right;
+	text-align: center;
+}
+
+#progress span{
+	width: 100%;
+	display: block;
+	vertical-align: middle;
+	color: white;
+	border: 1px solid black;
+}
+
+#progress span.complete{
+	background-color: green;
+}
+
 #movesFinished .myButton{
 	position: relative;
 }

@@ -89,6 +89,7 @@ Game.prototype.getNodeById = function(nodeIdToFind) {
 Game.prototype.visit = function(visitor) {
 	this.edges.forEach(visitor.renderEdge);
 	this.nodes.forEach(visitor.renderNode);
+	visitor.showLevel(this.noOfLevels,this.level);
 };
 
 Game.prototype.selectNode = function(nodeId) {

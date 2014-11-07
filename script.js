@@ -32,10 +32,22 @@ var onShapeReady = function(shape) {
 		circleHTML = circleHTML.replace('ID', node.id).replace('CX', node.x).replace('CY', node.y);
 		svgHTML += circleHTML;
 	};
+	visitor.showLevel = function(noOfLevels,currentLevel) {
+		var progressBar = $('#progress');
+		var spanHeight = Math.round(progressBar.height() / noOfLevels);
+		var progressHTML = '';
+		for (var i = noOfLevels; i >= 1; i--) {
+			if(i < currentLevel)
+				progressHTML += '<span class="complete">' + i + '</span>';
+			else
+				progressHTML += '<span>' + i + '</span>';
+		};
+		progressBar.html(progressHTML);
+		$('#progress span').css({'height':spanHeight-2+'px'});
+	};
 	presenter.game.visit(visitor);
 	svgHTML += '</svg>';
 	container.html(svgHTML);
-	$("#levelNumber").text("Level ==>> " + presenter.game.level + "/" + presenter.game.noOfLevels);
 };
 
 presenter.onEdgeVisited = function(edgeID, info) {
@@ -58,7 +70,6 @@ presenter.onLevelComplete = function(edgeID, info) {
 		$('#level').show();
 		$('#instruction').hide();
 		$('.resetLevel').hide();
-		$('#levelNumber').hide();
 	}, 500);
 };
 
@@ -128,7 +139,7 @@ presenter.onGameFinished = function() {
 	$('#level').hide();
 	$('.resetLevel').hide();
 	$('#finish').show();
-	$('#levelNumber').hide();
+	$('#progress').hide();
 };
 
 var init = function() {
@@ -157,8 +168,7 @@ var init = function() {
 		$('#finish').hide();
 		$('#container').show();
 		$('.resetLevel').show();
-		$('#levelNumber').show();
 	});
 };
 
-$(document).ready(init);
+$(window).load(init);
