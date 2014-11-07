@@ -14,7 +14,7 @@ var performAction = function(info, id) {
 	};
 	if (info.statusCode < 400)
 		dictionary["action" + info.statusCode](id, info);
-	else dictionary["error" + info.statusCode](id,info);
+	else dictionary["error" + info.statusCode](id, info);
 };
 
 
@@ -66,6 +66,9 @@ var showErrorMessage = function(message) {
 	var error = $('#error');
 	var container = $('#container');
 	error.find('h2').text(message);
+	$('circle').prop('disabled', true);
+	$('line').prop('disabled', true);
+	$('.resetLevel').prop('disabled', true);
 	error.animate({
 		height: "toggle",
 		display: 'inline-block'
@@ -86,6 +89,9 @@ var showErrorMessage = function(message) {
 				opacity: 1.0
 			});
 		});
+		$('circle').prop('disabled', false);
+		$('line').prop('disabled', false);
+		$('.resetLevel').prop('disabled', false);
 	}, 3000);
 	// Animation complete.
 };
@@ -109,11 +115,11 @@ presenter.onEdgeRevisit = function() {
 
 presenter.onNoPossibleMoves = function(edgeID, info) {
 	presenter.onEdgeVisited(edgeID, info);
-	setTimeout(function(){
+	setTimeout(function() {
 		$('#movesFinished').show();
-		$('circle').prop('disabled',true);
-		$('line').prop('disabled',true);
-	},500);
+		$('circle').prop('disabled', true);
+		$('line').prop('disabled', true);
+	}, 500);
 };
 
 presenter.onGameFinished = function() {
